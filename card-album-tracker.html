@@ -166,7 +166,7 @@
     display: flex; flex-direction: column; gap: 5px;
     transition: border-color 0.1s, background 0.1s;
   }
-  .card-tile.is-missing { border-color: var(--miss-border); background: var(--miss-bg); }
+  .card-tile.is-missing { background: var(--surface); }
   .card-tile.is-golden { border-color: var(--gold-border); }
   .card-tile.is-golden.is-missing { background: var(--gold-bg); border-color: var(--gold-border); }
   .card-tile.has-copies { border-color: var(--trade-border); background: var(--trade-bg); }
@@ -284,9 +284,17 @@
   .export-pill.golden { background: var(--gold-bg);  border-color: var(--gold-border);  color: var(--gold-text); }
   .empty-msg { font-size: 13px; color: var(--text3); font-style: italic; }
   .export-footer {
-    padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px;
+    padding: 12px 16px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
   }
   .export-footer .btn { flex: 1; text-align: center; }
+  .export-footer .spacer { flex: 1; }
+  .checkbox-label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text2); cursor: pointer;
+    white-space: nowrap; user-select: none;
+  }
+  .checkbox-label input[type=checkbox] { width: 14px; height: 14px; cursor: pointer; accent-color: var(--accent); }
 
   /* toast */
   #toast {
@@ -321,7 +329,7 @@
 <body>
 
 <header>
-  <h1>🃏 Clash of Critters - Card Tracker</h1>
+  <h1>Clash of Critters - Card Tracker</h1>
   <span class="stats-pill" id="global-stats">0 / 135 owned</span>
   <div class="header-btns">
     <button class="btn danger" onclick="openClearConfirm()">Clear all</button>
@@ -359,8 +367,12 @@
     </div>
     <div class="export-body" id="export-body"></div>
     <div class="export-footer">
-      <button class="btn" onclick="copyReport()">Copy as text</button>
-      <button class="btn" onclick="exportJSON()">Save JSON</button>
+      <label class="checkbox-label">
+        <input type="checkbox" id="hide-names-chk" onchange="renderExportTab(activeTab)"> Hide card names
+      </label>
+      <div class="spacer"></div>
+      <button class="btn" onclick="copyReport()">Copy to clipboard</button>
+      <button class="btn" onclick="saveReportFile()">Save as file</button>
     </div>
   </div>
 </div>
@@ -384,7 +396,7 @@ function initState() {
     const cards = [];
     for (let c = 0; c < CPP; c++) {
       const num = p * CPP + c + 1;
-      cards.push({ num, name: '', rarity: 0, golden: false, owned: null, copies: 0 });
+      cards.push({ num, name: '', rarity: 0, golden: false, owned: false, copies: 0 });
     }
     pages.push({ name: `Page ${p + 1}`, rewardAmount: '', rewardType: REWARD_TYPES[0], cards });
   }
@@ -404,7 +416,7 @@ function mergeState(loaded) {
       if (lc.name   !== undefined) c.name   = lc.name;
       if (lc.rarity !== undefined) c.rarity = lc.rarity;
       if (lc.golden !== undefined) c.golden = lc.golden;
-      if (lc.owned  !== undefined) c.owned  = lc.owned;
+      if (lc.owned  !== undefined) c.owned = lc.owned === true ? true : false;
       // migrate old 'dupes' field: dupes=1 meant 1 tradeable → copies=2
       if (lc.copies !== undefined) c.copies = lc.copies;
       else if (lc.dupes !== undefined) c.copies = lc.dupes > 0 ? lc.dupes + 1 : 0;
@@ -474,11 +486,19 @@ function buildUI() {
     // Cards grid
     const grid = document.createElement('div');
     grid.className = 'cards-grid';
-    page.cards.forEach((card, ci) => grid.appendChild(buildCardTile(pi, ci, card)));
+    const cardElements = [];
+    page.cards.forEach((card, ci) => {
+      const tile = buildCardTile(pi, ci, card);
+      grid.appendChild(tile);
+      cardElements.push({ ci, card });
+    });
 
     section.appendChild(header);
     section.appendChild(grid);
     main.appendChild(section);
+
+    // Only now are elements in the live DOM — getElementById works here
+    cardElements.forEach(({ ci, card }) => refreshCopiesDisplay(pi, ci, card));
     updatePageProgress(pi);
   });
   updateGlobalStats();
@@ -519,9 +539,9 @@ function buildCardTile(pi, ci, card) {
 
   // Status toggle
   const statusBtn = document.createElement('button');
-  statusBtn.className = `status-toggle ${card.owned === true ? 'have' : card.owned === false ? 'miss' : ''}`;
+  statusBtn.className = `status-toggle ${card.owned === true ? 'have' : 'miss'}`;
   statusBtn.id = `status-${pi}-${ci}`;
-  statusBtn.textContent = card.owned === true ? 'Have' : card.owned === false ? 'Missing' : '— unset';
+  statusBtn.textContent = card.owned === true ? 'Have' : 'Missing';
   statusBtn.addEventListener('click', () => cycleOwned(pi, ci));
 
   // Copies row
@@ -540,7 +560,7 @@ function buildCardTile(pi, ci, card) {
   copiesRow.querySelectorAll('.copies-btn').forEach(btn =>
     btn.addEventListener('click', () => changeCopies(pi, ci, parseInt(btn.dataset.d)))
   );
-  refreshCopiesDisplay(pi, ci, card);
+  // NOTE: refreshCopiesDisplay is called after this tile is in the DOM (see buildUI loop)
 
   tile.appendChild(top);
   tile.appendChild(starsRow);
@@ -569,13 +589,12 @@ function setRarity(pi, ci, s) {
 
 function cycleOwned(pi, ci) {
   const card = state.pages[pi].cards[ci];
-  card.owned = card.owned === null ? true : card.owned === true ? false : null;
-  // enforce: "Have" means at least 1 copy; clearing owned resets copies to 0
+  card.owned = card.owned === true ? false : true;
   if (card.owned === true && card.copies < 1) card.copies = 1;
   if (card.owned !== true) card.copies = 0;
   const btn = document.getElementById(`status-${pi}-${ci}`);
-  btn.className = `status-toggle ${card.owned === true ? 'have' : card.owned === false ? 'miss' : ''}`;
-  btn.textContent = card.owned === true ? 'Have' : card.owned === false ? 'Missing' : '— unset';
+  btn.className = `status-toggle ${card.owned === true ? 'have' : 'miss'}`;
+  btn.textContent = card.owned === true ? 'Have' : 'Missing';
   refreshCopiesDisplay(pi, ci, card);
   refreshTileClass(document.getElementById(`tile-${pi}-${ci}`), card);
   updatePageProgress(pi);
@@ -596,10 +615,11 @@ function refreshCopiesDisplay(pi, ci, card) {
   const row  = document.getElementById(`copies-row-${pi}-${ci}`);
   const disp = document.getElementById(`copies-disp-${pi}-${ci}`);
   const sub  = document.getElementById(`copies-sub-${pi}-${ci}`);
-  if (!disp) return;
+  if (!row || !disp) return;
 
   const locked = card.owned !== true;
   row.classList.toggle('locked', locked);
+  row.querySelectorAll('.copies-btn').forEach(btn => { btn.disabled = locked; });
 
   const c = card.copies;
   const tradeable = Math.max(0, c - 1);
@@ -611,13 +631,8 @@ function refreshCopiesDisplay(pi, ci, card) {
   } else {
     disp.textContent = `×${c}`;
     disp.className = `copies-display ${tradeable > 0 ? 'tradeable' : 'owned-1'}`;
-    if (tradeable > 0) {
-      sub.textContent = `${tradeable} tradeable`;
-      sub.className = 'copies-sub tradeable';
-    } else {
-      sub.textContent = 'no trade';
-      sub.className = 'copies-sub';
-    }
+    sub.textContent = tradeable > 0 ? `${tradeable} tradeable` : 'no trade';
+    sub.className = `copies-sub ${tradeable > 0 ? 'tradeable' : ''}`;
   }
 }
 
@@ -662,7 +677,8 @@ function collectData() {
   state.pages.forEach(page => {
     page.cards.forEach(card => {
       const tradCount = Math.max(0, card.copies - 1);
-      if (card.owned === false) {
+      const isOwned = card.owned === true;
+      if (!isOwned) {
         needed.push({ ...card, page: page.name });
       } else if (tradCount > 0) {
         const entry = { ...card, tradeCount: tradCount, page: page.name };
@@ -686,8 +702,13 @@ function groupByRarity(arr) {
 
 function starStr(n) { return n ? '★'.repeat(n) : '?'; }
 
-function cardLabel(c, showTrade = false) {
-  const name = c.name ? ` ${c.name}` : '';
+function hideNames() {
+  const chk = document.getElementById('hide-names-chk');
+  return chk ? chk.checked : false;
+}
+
+function cardLabel(c, showTrade = false, noNames = false) {
+  const name = (!noNames && c.name) ? ` ${c.name}` : '';
   const trade = showTrade && c.tradeCount > 1 ? ` ×${c.tradeCount}` : '';
   return `#${c.num}${name}${trade}`;
 }
@@ -695,23 +716,21 @@ function cardLabel(c, showTrade = false) {
 function renderExportTab(tab) {
   const { tradeable, golden, needed } = collectData();
   const body = document.getElementById('export-body');
+  const noNames = hideNames();
   if (tab === 'trade') {
-    body.innerHTML = renderGrouped(tradeable, 'trade', true,
-      'Normal duplicates available to trade',
-      'No tradeable duplicates yet — mark owned cards with ×2 or more.');
+    body.innerHTML = renderGrouped(tradeable, 'trade', true, noNames,
+      'Normal duplicates available to trade');
   } else if (tab === 'gold') {
-    body.innerHTML = renderGrouped(golden, 'golden', true,
-      'Golden duplicates — trade during special events only',
-      'No golden duplicates. Mark a card as golden ✦ and set copies to ×2+.');
+    body.innerHTML = renderGrouped(golden, 'golden', true, noNames,
+      'Golden duplicates — trade during special events only');
   } else {
-    body.innerHTML = renderGrouped(needed, 'need', false,
-      'Cards you still need',
-      'No cards marked as missing yet.');
+    body.innerHTML = renderGrouped(needed, 'need', false, noNames,
+      'Cards you still need');
   }
 }
 
-function renderGrouped(cards, pillClass, showTrade, title, emptyMsg) {
-  if (!cards.length) return `<p class="empty-msg">${emptyMsg}</p>`;
+function renderGrouped(cards, pillClass, showTrade, noNames, title) {
+  if (!cards.length) return `<p class="empty-msg">Nothing to show here yet.</p>`;
   const groups = groupByRarity(cards);
   let html = `<div class="export-section"><h3>${title}</h3>`;
   groups.forEach(g => {
@@ -719,7 +738,7 @@ function renderGrouped(cards, pillClass, showTrade, title, emptyMsg) {
       <div class="export-group-label">${starStr(g.rarity)} (${g.rarity || '?'}★) — ${g.cards.length} card${g.cards.length !== 1 ? 's' : ''}</div>
       <div class="export-pills">`;
     g.cards.forEach(c => {
-      html += `<span class="export-pill ${pillClass}">${cardLabel(c, showTrade)}</span>`;
+      html += `<span class="export-pill ${pillClass}">${cardLabel(c, showTrade, noNames)}</span>`;
     });
     html += `</div></div>`;
   });
@@ -729,39 +748,58 @@ function renderGrouped(cards, pillClass, showTrade, title, emptyMsg) {
 
 function buildTextReport() {
   const { tradeable, golden, needed } = collectData();
-  let out = '=== CARD ALBUM TRADE REPORT ===\n\n';
+  const noNames = hideNames();
+  const sections = [];
 
-  out += '── TO TRADE (normal) ──\n';
-  if (!tradeable.length) out += '  (none)\n';
-  else groupByRarity(tradeable).forEach(g => {
-    out += `  ${g.rarity}★: ${g.cards.map(c => cardLabel(c, true)).join(', ')}\n`;
-  });
+  if (tradeable.length) {
+    let s = '── TO TRADE (normal) ──\n';
+    groupByRarity(tradeable).forEach(g => {
+      s += `  ${g.rarity}★: ${g.cards.map(c => cardLabel(c, true, noNames)).join(', ')}\n`;
+    });
+    sections.push(s);
+  }
 
-  out += '\n── TO TRADE (golden — event only) ──\n';
-  if (!golden.length) out += '  (none)\n';
-  else groupByRarity(golden).forEach(g => {
-    out += `  ${g.rarity}★: ${g.cards.map(c => cardLabel(c, true)).join(', ')}\n`;
-  });
+  if (golden.length) {
+    let s = '── TO TRADE (golden — event only) ──\n';
+    groupByRarity(golden).forEach(g => {
+      s += `  ${g.rarity}★: ${g.cards.map(c => cardLabel(c, true, noNames)).join(', ')}\n`;
+    });
+    sections.push(s);
+  }
 
-  out += '\n── NEED ──\n';
-  if (!needed.length) out += '  (none)\n';
-  else groupByRarity(needed).forEach(g => {
-    out += `  ${g.rarity}★: ${g.cards.map(c => cardLabel(c)).join(', ')}\n`;
-  });
+  if (needed.length) {
+    let s = '── NEED ──\n';
+    groupByRarity(needed).forEach(g => {
+      s += `  ${g.rarity}★: ${g.cards.map(c => cardLabel(c, false, noNames)).join(', ')}\n`;
+    });
+    sections.push(s);
+  }
 
-  return out;
+  if (!sections.length) return 'No data to report yet.';
+  return '=== CLASH OF CRITTERS — CARD TRACKER REPORT ===\n\n' + sections.join('\n');
 }
 
 function copyReport() {
   const text = buildTextReport();
   navigator.clipboard.writeText(text)
-    .then(() => showToast('Report copied'))
+    .then(() => showToast('Copied to clipboard'))
     .catch(() => {
       const ta = document.createElement('textarea');
       ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
       document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-      document.body.removeChild(ta); showToast('Report copied');
+      document.body.removeChild(ta); showToast('Copied to clipboard');
     });
+}
+
+function saveReportFile() {
+  const text = buildTextReport();
+  const blob = new Blob([text], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'coc-card-report.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Report saved');
 }
 
 // ── JSON ───────────────────────────────────────────────────────────────────
