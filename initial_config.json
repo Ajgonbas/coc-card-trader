@@ -1,0 +1,1189 @@
+{
+  "pages": [
+    {
+      "name": "Solpear Set",
+      "rewardAmount": "300",
+      "rewardType": "Pinballs",
+      "cards": [
+        {
+          "num": 1,
+          "name": "Plank Pear",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 2,
+          "name": "Sharing is...",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 3,
+          "name": "Isaac Pearton",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 4,
+          "name": "Perpair Trouble",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 5,
+          "name": "Rainy Days",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 6,
+          "name": "Stressed Out",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 7,
+          "name": "Pear Out",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 8,
+          "name": "Butterfly Dream",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 9,
+          "name": "Forest Fright",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Cindermunk Set",
+      "rewardAmount": "10",
+      "rewardType": "Bento Boxes",
+      "cards": [
+        {
+          "num": 10,
+          "name": "Sweet Spot",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 11,
+          "name": "Tasty Treat",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 12,
+          "name": "Cinder Mischief",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 13,
+          "name": "Nap Time",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 14,
+          "name": "Nap Over",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 15,
+          "name": "Pinecone Surf",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 16,
+          "name": "JAckpot!",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 17,
+          "name": "Afternoon Tea",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 18,
+          "name": "Safety First",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Dozy Set",
+      "rewardAmount": "15",
+      "rewardType": "Capsules",
+      "cards": [
+        {
+          "num": 19,
+          "name": "Sleepy Starlight",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 20,
+          "name": "Fruit Fight",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 21,
+          "name": "Party Animal",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 22,
+          "name": "Can't See Me",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 23,
+          "name": "Thank you ",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 24,
+          "name": "Whetstone Call",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 25,
+          "name": "Noise Complaint",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 26,
+          "name": "Cozy Dozy",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 27,
+          "name": "Long Nap",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Capywata Set",
+      "rewardAmount": "5",
+      "rewardType": "Wishboxes",
+      "cards": [
+        {
+          "num": 28,
+          "name": "This is Life",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 29,
+          "name": "Curious Fruit",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 30,
+          "name": "Feel The Breeze",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 31,
+          "name": "Orange Bath",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 32,
+          "name": "Wata and Papa",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 33,
+          "name": "Zetsy Jenga",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 34,
+          "name": "Capy Swim",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 35,
+          "name": "Sunset View",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 36,
+          "name": "Friendly Spat",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Clucky Set",
+      "rewardAmount": "500",
+      "rewardType": "Pinballs",
+      "cards": [
+        {
+          "num": 37,
+          "name": "A New Day",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 38,
+          "name": "Egg Thief",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 39,
+          "name": "Stay Hydrated",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 40,
+          "name": "Wrong Branch ",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 41,
+          "name": "Dreamy Field",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 42,
+          "name": "Salad Seeker",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 43,
+          "name": "New Hairdo ",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 44,
+          "name": "Rainy Samba",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 45,
+          "name": "Fireside Chat",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Zapup Set",
+      "rewardAmount": "20",
+      "rewardType": "Bento Boxes",
+      "cards": [
+        {
+          "num": 46,
+          "name": "Greeting Zap",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 47,
+          "name": "Staying Home",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 48,
+          "name": "One More Lap!",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 49,
+          "name": "Best Pal!",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 50,
+          "name": "Tummy Rub",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 51,
+          "name": "Zapup Power",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 52,
+          "name": "Cute Dog Inside",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 53,
+          "name": "Best Gift Ever",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 54,
+          "name": "Zapped Up",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Sparkrow Set",
+      "rewardAmount": "700",
+      "rewardType": "Pinballs",
+      "cards": [
+        {
+          "num": 55,
+          "name": "Head Scratch",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 56,
+          "name": "Picky Eater",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 57,
+          "name": "Water Fight",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 58,
+          "name": "Pushing Buttons",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 59,
+          "name": "Who's Boss?",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 60,
+          "name": "Mini Bath",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 61,
+          "name": "?????",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 62,
+          "name": "Strike a Pose",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 63,
+          "name": "?????",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Frugling Set",
+      "rewardAmount": "30",
+      "rewardType": "Capsules",
+      "cards": [
+        {
+          "num": 64,
+          "name": "Just Curious",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 65,
+          "name": "Big Fish",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 66,
+          "name": "Frug Reflection",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 67,
+          "name": "Moonkeeper",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 68,
+          "name": "Daily Catch",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 69,
+          "name": "Open Mic",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 70,
+          "name": "Comfort Zone",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 71,
+          "name": "",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 72,
+          "name": "",
+          "rarity": 4,
+          "golden": true,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Frostnip Set",
+      "rewardAmount": "900",
+      "rewardType": "Pinballs",
+      "cards": [
+        {
+          "num": 73,
+          "name": "Just Chillin'",
+          "rarity": 1,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 74,
+          "name": "Self Care",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 75,
+          "name": "Do Not Eat!",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 76,
+          "name": "Custom Drink",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 77,
+          "name": "Frostnip Spotted",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 78,
+          "name": "Ice In Fridge",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 79,
+          "name": "Icy Snack",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 80,
+          "name": "Sneak Peak",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 81,
+          "name": "Frost Run",
+          "rarity": 4,
+          "golden": true,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Pyropup Set",
+      "rewardAmount": "8",
+      "rewardType": "Wishboxes",
+      "cards": [
+        {
+          "num": 82,
+          "name": "Ready To Go",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 83,
+          "name": "Just One Bite",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 84,
+          "name": "Pyro Awakening",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 85,
+          "name": "That Time Again",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 86,
+          "name": "Making Friends",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 87,
+          "name": "Fire Training",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 88,
+          "name": "?????",
+          "rarity": 4,
+          "golden": true,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 89,
+          "name": "Surprise Shower",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 90,
+          "name": "?????",
+          "rarity": 5,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Zapur Set",
+      "rewardAmount": "10",
+      "rewardType": "Bento Boxes",
+      "cards": [
+        {
+          "num": 91,
+          "name": "First Glance",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 92,
+          "name": "A King is Born",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 93,
+          "name": "Shock-Proof",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 94,
+          "name": "Charge Tutorial",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 95,
+          "name": "Can't Hear You",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 96,
+          "name": "?????",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 97,
+          "name": "?????",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 98,
+          "name": "?????",
+          "rarity": 4,
+          "golden": true,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 99,
+          "name": "?????",
+          "rarity": 5,
+          "golden": true,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Goonbug Set",
+      "rewardAmount": "1200",
+      "rewardType": "Pinballs",
+      "cards": [
+        {
+          "num": 100,
+          "name": "Loft Branch",
+          "rarity": 2,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 101,
+          "name": "Rain & Gloom",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 102,
+          "name": "?????",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 103,
+          "name": "The Road Home",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 104,
+          "name": "?????",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 105,
+          "name": "?????",
+          "rarity": 4,
+          "golden": true,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 106,
+          "name": "Blazing Beetle",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 107,
+          "name": "?????",
+          "rarity": 5,
+          "golden": true,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 108,
+          "name": "?????",
+          "rarity": 5,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Rubblet Set",
+      "rewardAmount": "50",
+      "rewardType": "Pinballs",
+      "cards": [
+        {
+          "num": 109,
+          "name": "Stone Snooze",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 110,
+          "name": "Rembrandt Style",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 111,
+          "name": "Love-Struck",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 112,
+          "name": "The Duel",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 113,
+          "name": "Limelight",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 114,
+          "name": "?????",
+          "rarity": 4,
+          "golden": true,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 115,
+          "name": "?????",
+          "rarity": 5,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 116,
+          "name": "?????",
+          "rarity": 5,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 117,
+          "name": "?????",
+          "rarity": 5,
+          "golden": true,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Ashlarva Set",
+      "rewardAmount": "15",
+      "rewardType": "Bento Boxes",
+      "cards": [
+        {
+          "num": 118,
+          "name": "Heaty Meal",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 119,
+          "name": "Leafy Mimicry",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 120,
+          "name": "?????",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 121,
+          "name": "Rosty Flutter",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 122,
+          "name": "?????",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 123,
+          "name": "Emergence",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 124,
+          "name": "Forever Fan",
+          "rarity": 5,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 125,
+          "name": "?????",
+          "rarity": 5,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 126,
+          "name": "?????",
+          "rarity": 5,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    },
+    {
+      "name": "Dewgrub Set",
+      "rewardAmount": "10",
+      "rewardType": "Wishboxes",
+      "cards": [
+        {
+          "num": 127,
+          "name": "Dew Catcher",
+          "rarity": 3,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 128,
+          "name": "Dewy Pillow",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 129,
+          "name": "All in Dew Time",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 130,
+          "name": "Burning Envy",
+          "rarity": 4,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 131,
+          "name": "?????",
+          "rarity": 4,
+          "golden": true,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 132,
+          "name": "?????",
+          "rarity": 5,
+          "golden": true,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 133,
+          "name": "?????",
+          "rarity": 5,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 134,
+          "name": "?????",
+          "rarity": 5,
+          "golden": false,
+          "owned": null,
+          "copies": 0
+        },
+        {
+          "num": 135,
+          "name": "Charring Waves",
+          "rarity": 5,
+          "golden": true,
+          "owned": null,
+          "copies": 0
+        }
+      ]
+    }
+  ]
+}

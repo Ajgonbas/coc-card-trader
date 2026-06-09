@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clash of Critters - Card Tracker</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f3ef;
+    --surface: #ffffff;
+    --surface2: #f0ede8;
+    --border: #e0dbd3;
+    --border2: #ccc6bc;
+    --text: #1a1815;
+    --text2: #6b6560;
+    --text3: #a09a93;
+    --star-on: #e8a020;
+    --star-off: #d9d3ca;
+    --gold-bg: #fff8e6;
+    --gold-border: #e8a020;
+    --gold-text: #7a4f00;
+    --have-bg: #e8f4e8;
+    --have-border: #6ab06a;
+    --have-text: #1e5c1e;
+    --miss-bg: #faeae8;
+    --miss-border: #d97060;
+    --miss-text: #7a2018;
+    --trade-bg: #e8f0fa;
+    --trade-border: #6090d0;
+    --trade-text: #1a3a6a;
+    --accent: #4a6fa5;
+    --accent-hover: #3a5a8a;
+    --radius: 8px;
+    --radius-sm: 5px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1815;
+      --surface: #252320;
+      --surface2: #2e2b27;
+      --border: #3a3630;
+      --border2: #4a4640;
+      --text: #f0ede8;
+      --text2: #a09a93;
+      --text3: #6b6560;
+      --star-off: #3a3630;
+      --gold-bg: #2e2310;
+      --gold-border: #c08010;
+      --gold-text: #f0c060;
+      --have-bg: #132013;
+      --have-border: #3a703a;
+      --have-text: #80c880;
+      --miss-bg: #201210;
+      --miss-border: #904030;
+      --miss-text: #e08070;
+      --trade-bg: #101828;
+      --trade-border: #304870;
+      --trade-text: #80a8e0;
+      --accent: #5a80b5;
+    }
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+  }
+  header h1 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; flex: 1; min-width: 120px; }
+  .stats-pill {
+    font-size: 12px; color: var(--text2);
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 3px 10px; white-space: nowrap;
+  }
+  .header-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    font-size: 13px; font-weight: 500; padding: 6px 12px;
+    border-radius: var(--radius-sm); border: 1px solid var(--border2);
+    background: var(--surface); color: var(--text);
+    cursor: pointer; white-space: nowrap; transition: background 0.12s;
+  }
+  .btn:hover { background: var(--surface2); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+  /* ── MAIN ── */
+  main { padding: 16px 20px 80px; max-width: 960px; margin: 0 auto; }
+
+  /* ── PAGE SECTION ── */
+  .page-section { margin-bottom: 20px; }
+
+  .page-header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius) var(--radius) 0 0;
+    overflow: hidden;
+  }
+  .page-section.collapsed .page-header { border-radius: var(--radius); }
+
+  .page-header-top {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer; user-select: none;
+  }
+  .toggle-icon { color: var(--text3); font-size: 12px; transition: transform 0.15s; flex-shrink: 0; }
+  .page-section.collapsed .toggle-icon { transform: rotate(-90deg); }
+
+  .page-name-input {
+    font-size: 13px; font-weight: 600;
+    border: none; background: transparent; color: var(--text);
+    width: 160px; flex-shrink: 0; cursor: text; outline: none;
+  }
+  .page-name-input:focus { background: var(--surface2); border-radius: 3px; padding: 0 4px; }
+
+  .page-progress { font-size: 11px; color: var(--text3); white-space: nowrap; flex-shrink: 0; }
+
+  /* reward controls — inline in the top header row */
+  .reward-label { font-size: 11px; color: var(--text3); white-space: nowrap; margin-left: auto; }
+  .reward-amount {
+    width: 56px; font-size: 12px; font-weight: 600;
+    border: 1px solid var(--border2); border-radius: 4px;
+    background: var(--surface); color: var(--text);
+    padding: 2px 4px; outline: none; text-align: center;
+  }
+  .reward-amount:focus { border-color: var(--accent); }
+  .reward-type {
+    font-size: 11px; font-weight: 500;
+    border: 1px solid var(--border2); border-radius: 4px;
+    background: var(--surface); color: var(--text);
+    padding: 2px 4px; outline: none; cursor: pointer;
+  }
+  .reward-type:focus { border-color: var(--accent); }
+
+  /* cards grid */
+  .cards-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 6px; padding: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border); border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+  }
+  .page-section.collapsed .cards-grid { display: none; }
+
+  /* ── CARD TILE ── */
+  .card-tile {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); padding: 7px;
+    display: flex; flex-direction: column; gap: 5px;
+    transition: border-color 0.1s, background 0.1s;
+  }
+  .card-tile.is-missing { border-color: var(--miss-border); background: var(--miss-bg); }
+  .card-tile.is-golden { border-color: var(--gold-border); }
+  .card-tile.is-golden.is-missing { background: var(--gold-bg); border-color: var(--gold-border); }
+  .card-tile.has-copies { border-color: var(--trade-border); background: var(--trade-bg); }
+
+  .card-top {
+    display: flex; align-items: center; gap: 4px;
+  }
+  .card-num { font-size: 11px; font-weight: 700; color: var(--text3); min-width: 24px; flex-shrink: 0; }
+  .card-name-input {
+    font-size: 11px; border: none; background: transparent;
+    color: var(--text2); flex: 1; outline: none; min-width: 0; text-overflow: ellipsis;
+  }
+  .card-name-input:focus { background: var(--surface2); border-radius: 2px; padding: 0 2px; }
+  .card-name-input::placeholder { color: var(--text3); }
+  .golden-btn {
+    font-size: 13px; background: none; border: none; cursor: pointer;
+    padding: 0 1px; line-height: 1; opacity: 0.3;
+    transition: opacity 0.1s, transform 0.1s; flex-shrink: 0;
+  }
+  .golden-btn.active { opacity: 1; transform: scale(1.15); }
+
+  /* stars */
+  .stars-row { display: flex; gap: 2px; align-items: center; }
+  .star-btn {
+    width: 18px; height: 18px; font-size: 14px; line-height: 1;
+    background: none; border: none; cursor: pointer; padding: 0;
+    color: var(--star-off); transition: color 0.08s, transform 0.08s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .star-btn.lit { color: var(--star-on); }
+  .star-btn:hover { transform: scale(1.2); }
+
+  /* status toggle */
+  .status-toggle {
+    width: 100%; font-size: 11px; font-weight: 600; padding: 3px 6px;
+    border-radius: 4px; border: 1px solid var(--border); cursor: pointer;
+    text-align: center; transition: all 0.1s;
+    background: var(--surface2); color: var(--text2); letter-spacing: 0.01em;
+  }
+  .status-toggle.have { background: var(--have-bg); border-color: var(--have-border); color: var(--have-text); }
+  .status-toggle.miss { background: var(--miss-bg); border-color: var(--miss-border); color: var(--miss-text); }
+
+  /* copies row */
+  .copies-row {
+    display: flex; align-items: center; gap: 5px;
+  }
+  .copies-label { font-size: 10px; color: var(--text3); }
+  .copies-controls { display: flex; align-items: center; gap: 3px; margin-left: auto; }
+  .copies-btn {
+    width: 20px; height: 20px; font-size: 14px; font-weight: 700;
+    border: 1px solid var(--border2); border-radius: 4px;
+    background: var(--surface); color: var(--text2);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    line-height: 1; padding: 0; transition: background 0.1s;
+  }
+  .copies-btn:hover { background: var(--surface2); }
+  .copies-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .copies-btn:disabled:hover { background: var(--surface); }
+  .copies-row.locked { opacity: 0.38; pointer-events: none; }
+  .copies-display {
+    font-size: 12px; font-weight: 700; min-width: 28px;
+    text-align: center; color: var(--text3);
+  }
+  .copies-display.owned-1 { color: var(--have-text); }
+  .copies-display.tradeable  { color: var(--trade-text); }
+  .copies-sub {
+    font-size: 10px; color: var(--text3); margin-left: 2px;
+    white-space: nowrap;
+  }
+  .copies-sub.tradeable { color: var(--trade-text); font-weight: 600; }
+
+  /* ── EXPORT PANEL ── */
+  #export-panel {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 200;
+    align-items: flex-end; justify-content: center;
+  }
+  #export-panel.open { display: flex; }
+  .export-sheet {
+    background: var(--surface); border-radius: var(--radius) var(--radius) 0 0;
+    width: 100%; max-width: 700px; max-height: 80vh;
+    display: flex; flex-direction: column;
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.18);
+  }
+  .export-header {
+    display: flex; align-items: center;
+    padding: 14px 16px 10px; border-bottom: 1px solid var(--border); gap: 10px;
+  }
+  .export-header h2 { font-size: 15px; font-weight: 600; flex: 1; }
+  .close-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text2); padding: 0; line-height: 1; }
+  .tab-row {
+    display: flex; border-bottom: 1px solid var(--border); padding: 0 16px;
+  }
+  .tab-btn {
+    font-size: 13px; font-weight: 500; padding: 8px 14px;
+    border: none; background: none; cursor: pointer; color: var(--text2);
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    transition: color 0.1s, border-color 0.1s;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .export-body { flex: 1; overflow-y: auto; padding: 16px; }
+  .export-section { margin-bottom: 20px; }
+  .export-section h3 {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--text3); margin-bottom: 10px;
+  }
+  .export-group { margin-bottom: 10px; }
+  .export-group-label { font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
+  .export-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .export-pill {
+    font-size: 12px; padding: 3px 9px; border-radius: 20px; border: 1px solid; white-space: nowrap;
+  }
+  .export-pill.trade  { background: var(--trade-bg); border-color: var(--trade-border); color: var(--trade-text); }
+  .export-pill.need   { background: var(--miss-bg);  border-color: var(--miss-border);  color: var(--miss-text); }
+  .export-pill.golden { background: var(--gold-bg);  border-color: var(--gold-border);  color: var(--gold-text); }
+  .empty-msg { font-size: 13px; color: var(--text3); font-style: italic; }
+  .export-footer {
+    padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px;
+  }
+  .export-footer .btn { flex: 1; text-align: center; }
+
+  /* toast */
+  #toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--text); color: var(--surface);
+    font-size: 13px; padding: 8px 16px; border-radius: 20px;
+    pointer-events: none; transition: transform 0.25s ease;
+    z-index: 300; white-space: nowrap;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+  .btn.danger { color: var(--miss-text); border-color: var(--miss-border); }
+  .btn.danger:hover { background: var(--miss-bg); }
+
+  /* confirm dialog */
+  #confirm-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 400;
+    align-items: center; justify-content: center;
+  }
+  #confirm-overlay.open { display: flex; }
+  .confirm-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px 22px;
+    max-width: 320px; width: 90%; box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  }
+  .confirm-box h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .confirm-box p  { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 18px; }
+  .confirm-btns   { display: flex; gap: 8px; justify-content: flex-end; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🃏 Clash of Critters - Card Tracker</h1>
+  <span class="stats-pill" id="global-stats">0 / 135 owned</span>
+  <div class="header-btns">
+    <button class="btn danger" onclick="openClearConfirm()">Clear all</button>
+    <button class="btn" onclick="document.getElementById('import-input').click()">Import JSON</button>
+    <button class="btn" onclick="exportJSON()">Save JSON</button>
+    <button class="btn primary" onclick="openExport()">Export report ↗</button>
+  </div>
+</header>
+
+<input type="file" id="import-input" accept=".json,application/json" onchange="importJSON(event)">
+
+<div id="confirm-overlay">
+  <div class="confirm-box">
+    <h3>Clear everything?</h3>
+    <p>This will wipe all card data, page names, and rewards from both the page and local storage. There's no undo — export a JSON first if you want a backup.</p>
+    <div class="confirm-btns">
+      <button class="btn" onclick="closeClearConfirm()">Cancel</button>
+      <button class="btn danger" onclick="confirmClearAll()">Yes, clear all</button>
+    </div>
+  </div>
+</div>
+
+<main id="main-content"></main>
+
+<div id="export-panel">
+  <div class="export-sheet">
+    <div class="export-header">
+      <h2>Trade &amp; Need report</h2>
+      <button class="close-btn" onclick="closeExport()">×</button>
+    </div>
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="switchTab('trade')">To trade</button>
+      <button class="tab-btn" onclick="switchTab('gold')">Golden (event)</button>
+      <button class="tab-btn" onclick="switchTab('need')">Need</button>
+    </div>
+    <div class="export-body" id="export-body"></div>
+    <div class="export-footer">
+      <button class="btn" onclick="copyReport()">Copy as text</button>
+      <button class="btn" onclick="exportJSON()">Save JSON</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const PAGES = 15;
+const CPP   = 9; // cards per page
+const TOTAL = PAGES * CPP;
+const LS_KEY = 'card-album-v2';
+const REWARD_TYPES = ['Pinballs', 'Bento Boxes', 'Capsules', 'Wishboxes'];
+
+let state = initState();
+let activeTab = 'trade';
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+function initState() {
+  const pages = [];
+  for (let p = 0; p < PAGES; p++) {
+    const cards = [];
+    for (let c = 0; c < CPP; c++) {
+      const num = p * CPP + c + 1;
+      cards.push({ num, name: '', rarity: 0, golden: false, owned: null, copies: 0 });
+    }
+    pages.push({ name: `Page ${p + 1}`, rewardAmount: '', rewardType: REWARD_TYPES[0], cards });
+  }
+  return { pages };
+}
+
+function mergeState(loaded) {
+  if (!loaded.pages) return;
+  loaded.pages.forEach((lp, pi) => {
+    if (!state.pages[pi]) return;
+    if (lp.name)         state.pages[pi].name = lp.name;
+    if (lp.rewardAmount !== undefined) state.pages[pi].rewardAmount = lp.rewardAmount;
+    if (lp.rewardType   !== undefined) state.pages[pi].rewardType   = lp.rewardType;
+    if (lp.cards) lp.cards.forEach((lc, ci) => {
+      if (!state.pages[pi].cards[ci]) return;
+      const c = state.pages[pi].cards[ci];
+      if (lc.name   !== undefined) c.name   = lc.name;
+      if (lc.rarity !== undefined) c.rarity = lc.rarity;
+      if (lc.golden !== undefined) c.golden = lc.golden;
+      if (lc.owned  !== undefined) c.owned  = lc.owned;
+      // migrate old 'dupes' field: dupes=1 meant 1 tradeable → copies=2
+      if (lc.copies !== undefined) c.copies = lc.copies;
+      else if (lc.dupes !== undefined) c.copies = lc.dupes > 0 ? lc.dupes + 1 : 0;
+    });
+  });
+}
+
+function saveState() {
+  localStorage.setItem(LS_KEY, JSON.stringify(state));
+  updateGlobalStats();
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) mergeState(JSON.parse(raw));
+  } catch(e) {}
+}
+
+// ── BUILD UI ───────────────────────────────────────────────────────────────
+function buildUI() {
+  const main = document.getElementById('main-content');
+  main.innerHTML = '';
+  state.pages.forEach((page, pi) => {
+    const section = document.createElement('div');
+    section.className = 'page-section';
+    section.id = `page-${pi}`;
+
+    // Header shell
+    const header = document.createElement('div');
+    header.className = 'page-header';
+
+    // Top row: toggle + name + progress
+    const topRow = document.createElement('div');
+    topRow.className = 'page-header-top';
+    const typeOptions = REWARD_TYPES.map(t =>
+      `<option value="${esc(t)}" ${page.rewardType === t ? 'selected' : ''}>${esc(t)}</option>`
+    ).join('');
+    topRow.innerHTML = `
+      <span class="toggle-icon">▼</span>
+      <input class="page-name-input" type="text" value="${esc(page.name)}" placeholder="Page ${pi+1}" data-pi="${pi}">
+      <span class="page-progress" id="page-prog-${pi}"></span>
+      <span class="reward-label">Reward:</span>
+      <input class="reward-amount" type="number" min="0" step="1"
+             value="${esc(page.rewardAmount)}" placeholder="0" id="ramt-${pi}">
+      <select class="reward-type" id="rtype-${pi}">${typeOptions}</select>
+    `;
+    topRow.addEventListener('click', e => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+      section.classList.toggle('collapsed');
+    });
+    topRow.querySelector('.page-name-input').addEventListener('input', e => {
+      state.pages[pi].name = e.target.value;
+      saveState();
+    });
+    topRow.querySelector('.reward-amount').addEventListener('input', e => {
+      state.pages[pi].rewardAmount = e.target.value;
+      saveState();
+    });
+    topRow.querySelector('.reward-type').addEventListener('change', e => {
+      state.pages[pi].rewardType = e.target.value;
+      saveState();
+    });
+
+    header.appendChild(topRow);
+
+    // Cards grid
+    const grid = document.createElement('div');
+    grid.className = 'cards-grid';
+    page.cards.forEach((card, ci) => grid.appendChild(buildCardTile(pi, ci, card)));
+
+    section.appendChild(header);
+    section.appendChild(grid);
+    main.appendChild(section);
+    updatePageProgress(pi);
+  });
+  updateGlobalStats();
+}
+
+function buildCardTile(pi, ci, card) {
+  const tile = document.createElement('div');
+  tile.className = 'card-tile';
+  tile.id = `tile-${pi}-${ci}`;
+  refreshTileClass(tile, card);
+
+  // Top: num + name + golden
+  const top = document.createElement('div');
+  top.className = 'card-top';
+  top.innerHTML = `
+    <span class="card-num">#${card.num}</span>
+    <input class="card-name-input" type="text" value="${esc(card.name)}" placeholder="Name…">
+    <button class="golden-btn ${card.golden ? 'active' : ''}" title="Golden card">✦</button>
+  `;
+  top.querySelector('.card-name-input').addEventListener('input', e => {
+    state.pages[pi].cards[ci].name = e.target.value; saveState();
+  });
+  top.querySelector('.golden-btn').addEventListener('click', () => toggleGolden(pi, ci));
+
+  // Stars
+  const starsRow = document.createElement('div');
+  starsRow.className = 'stars-row';
+  starsRow.id = `stars-${pi}-${ci}`;
+  for (let s = 1; s <= 5; s++) {
+    const btn = document.createElement('button');
+    btn.className = `star-btn ${card.rarity >= s ? 'lit' : ''}`;
+    btn.dataset.star = s;
+    btn.title = `${s}★`;
+    btn.textContent = '★';
+    btn.addEventListener('click', () => setRarity(pi, ci, s));
+    starsRow.appendChild(btn);
+  }
+
+  // Status toggle
+  const statusBtn = document.createElement('button');
+  statusBtn.className = `status-toggle ${card.owned === true ? 'have' : card.owned === false ? 'miss' : ''}`;
+  statusBtn.id = `status-${pi}-${ci}`;
+  statusBtn.textContent = card.owned === true ? 'Have' : card.owned === false ? 'Missing' : '— unset';
+  statusBtn.addEventListener('click', () => cycleOwned(pi, ci));
+
+  // Copies row
+  const copiesRow = document.createElement('div');
+  copiesRow.className = 'copies-row';
+  copiesRow.id = `copies-row-${pi}-${ci}`;
+  copiesRow.innerHTML = `
+    <span class="copies-label">Copies</span>
+    <div class="copies-controls">
+      <button class="copies-btn" data-d="-1">−</button>
+      <span class="copies-display" id="copies-disp-${pi}-${ci}"></span>
+      <button class="copies-btn" data-d="1">+</button>
+    </div>
+    <span class="copies-sub" id="copies-sub-${pi}-${ci}"></span>
+  `;
+  copiesRow.querySelectorAll('.copies-btn').forEach(btn =>
+    btn.addEventListener('click', () => changeCopies(pi, ci, parseInt(btn.dataset.d)))
+  );
+  refreshCopiesDisplay(pi, ci, card);
+
+  tile.appendChild(top);
+  tile.appendChild(starsRow);
+  tile.appendChild(statusBtn);
+  tile.appendChild(copiesRow);
+  return tile;
+}
+
+// ── INTERACTIONS ───────────────────────────────────────────────────────────
+function toggleGolden(pi, ci) {
+  const card = state.pages[pi].cards[ci];
+  card.golden = !card.golden;
+  document.querySelector(`#tile-${pi}-${ci} .golden-btn`).classList.toggle('active', card.golden);
+  refreshTileClass(document.getElementById(`tile-${pi}-${ci}`), card);
+  saveState();
+}
+
+function setRarity(pi, ci, s) {
+  const card = state.pages[pi].cards[ci];
+  card.rarity = card.rarity === s ? 0 : s;
+  document.getElementById(`stars-${pi}-${ci}`).querySelectorAll('.star-btn').forEach(b => {
+    b.classList.toggle('lit', card.rarity >= parseInt(b.dataset.star));
+  });
+  saveState();
+}
+
+function cycleOwned(pi, ci) {
+  const card = state.pages[pi].cards[ci];
+  card.owned = card.owned === null ? true : card.owned === true ? false : null;
+  // enforce: "Have" means at least 1 copy; clearing owned resets copies to 0
+  if (card.owned === true && card.copies < 1) card.copies = 1;
+  if (card.owned !== true) card.copies = 0;
+  const btn = document.getElementById(`status-${pi}-${ci}`);
+  btn.className = `status-toggle ${card.owned === true ? 'have' : card.owned === false ? 'miss' : ''}`;
+  btn.textContent = card.owned === true ? 'Have' : card.owned === false ? 'Missing' : '— unset';
+  refreshCopiesDisplay(pi, ci, card);
+  refreshTileClass(document.getElementById(`tile-${pi}-${ci}`), card);
+  updatePageProgress(pi);
+  updateGlobalStats();
+  saveState();
+}
+
+function changeCopies(pi, ci, delta) {
+  const card = state.pages[pi].cards[ci];
+  const floor = card.owned === true ? 1 : 0;
+  card.copies = Math.max(floor, card.copies + delta);
+  refreshCopiesDisplay(pi, ci, card);
+  refreshTileClass(document.getElementById(`tile-${pi}-${ci}`), card);
+  saveState();
+}
+
+function refreshCopiesDisplay(pi, ci, card) {
+  const row  = document.getElementById(`copies-row-${pi}-${ci}`);
+  const disp = document.getElementById(`copies-disp-${pi}-${ci}`);
+  const sub  = document.getElementById(`copies-sub-${pi}-${ci}`);
+  if (!disp) return;
+
+  const locked = card.owned !== true;
+  row.classList.toggle('locked', locked);
+
+  const c = card.copies;
+  const tradeable = Math.max(0, c - 1);
+  if (c === 0) {
+    disp.textContent = '—';
+    disp.className = 'copies-display';
+    sub.textContent = '';
+    sub.className = 'copies-sub';
+  } else {
+    disp.textContent = `×${c}`;
+    disp.className = `copies-display ${tradeable > 0 ? 'tradeable' : 'owned-1'}`;
+    if (tradeable > 0) {
+      sub.textContent = `${tradeable} tradeable`;
+      sub.className = 'copies-sub tradeable';
+    } else {
+      sub.textContent = 'no trade';
+      sub.className = 'copies-sub';
+    }
+  }
+}
+
+function refreshTileClass(tile, card) {
+  tile.className = 'card-tile';
+  if (card.owned === false) tile.classList.add('is-missing');
+  if (card.golden) tile.classList.add('is-golden');
+  const tradeable = card.copies > 1 && card.owned !== false;
+  if (tradeable) tile.classList.add('has-copies');
+}
+
+function updatePageProgress(pi) {
+  const cards = state.pages[pi].cards;
+  const owned = cards.filter(c => c.owned === true).length;
+  document.getElementById(`page-prog-${pi}`).textContent = `${owned} / ${CPP}`;
+}
+
+function updateGlobalStats() {
+  let owned = 0;
+  state.pages.forEach(p => p.cards.forEach(c => { if (c.owned === true) owned++; }));
+  document.getElementById('global-stats').textContent = `${owned} / ${TOTAL} owned`;
+}
+
+// ── EXPORT ─────────────────────────────────────────────────────────────────
+function openExport() {
+  document.getElementById('export-panel').classList.add('open');
+  renderExportTab(activeTab);
+}
+function closeExport() {
+  document.getElementById('export-panel').classList.remove('open');
+}
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['trade','gold','need'][i] === tab);
+  });
+  renderExportTab(tab);
+}
+
+function collectData() {
+  const tradeable = [], golden = [], needed = [];
+  state.pages.forEach(page => {
+    page.cards.forEach(card => {
+      const tradCount = Math.max(0, card.copies - 1);
+      if (card.owned === false) {
+        needed.push({ ...card, page: page.name });
+      } else if (tradCount > 0) {
+        const entry = { ...card, tradeCount: tradCount, page: page.name };
+        if (card.golden) golden.push(entry);
+        else tradeable.push(entry);
+      }
+    });
+  });
+  return { tradeable, golden, needed };
+}
+
+function groupByRarity(arr) {
+  const map = {};
+  arr.forEach(c => {
+    const k = c.rarity || 0;
+    if (!map[k]) map[k] = [];
+    map[k].push(c);
+  });
+  return Object.keys(map).sort((a,b) => +a - +b).map(k => ({ rarity: +k, cards: map[k] }));
+}
+
+function starStr(n) { return n ? '★'.repeat(n) : '?'; }
+
+function cardLabel(c, showTrade = false) {
+  const name = c.name ? ` ${c.name}` : '';
+  const trade = showTrade && c.tradeCount > 1 ? ` ×${c.tradeCount}` : '';
+  return `#${c.num}${name}${trade}`;
+}
+
+function renderExportTab(tab) {
+  const { tradeable, golden, needed } = collectData();
+  const body = document.getElementById('export-body');
+  if (tab === 'trade') {
+    body.innerHTML = renderGrouped(tradeable, 'trade', true,
+      'Normal duplicates available to trade',
+      'No tradeable duplicates yet — mark owned cards with ×2 or more.');
+  } else if (tab === 'gold') {
+    body.innerHTML = renderGrouped(golden, 'golden', true,
+      'Golden duplicates — trade during special events only',
+      'No golden duplicates. Mark a card as golden ✦ and set copies to ×2+.');
+  } else {
+    body.innerHTML = renderGrouped(needed, 'need', false,
+      'Cards you still need',
+      'No cards marked as missing yet.');
+  }
+}
+
+function renderGrouped(cards, pillClass, showTrade, title, emptyMsg) {
+  if (!cards.length) return `<p class="empty-msg">${emptyMsg}</p>`;
+  const groups = groupByRarity(cards);
+  let html = `<div class="export-section"><h3>${title}</h3>`;
+  groups.forEach(g => {
+    html += `<div class="export-group">
+      <div class="export-group-label">${starStr(g.rarity)} (${g.rarity || '?'}★) — ${g.cards.length} card${g.cards.length !== 1 ? 's' : ''}</div>
+      <div class="export-pills">`;
+    g.cards.forEach(c => {
+      html += `<span class="export-pill ${pillClass}">${cardLabel(c, showTrade)}</span>`;
+    });
+    html += `</div></div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function buildTextReport() {
+  const { tradeable, golden, needed } = collectData();
+  let out = '=== CARD ALBUM TRADE REPORT ===\n\n';
+
+  out += '── TO TRADE (normal) ──\n';
+  if (!tradeable.length) out += '  (none)\n';
+  else groupByRarity(tradeable).forEach(g => {
+    out += `  ${g.rarity}★: ${g.cards.map(c => cardLabel(c, true)).join(', ')}\n`;
+  });
+
+  out += '\n── TO TRADE (golden — event only) ──\n';
+  if (!golden.length) out += '  (none)\n';
+  else groupByRarity(golden).forEach(g => {
+    out += `  ${g.rarity}★: ${g.cards.map(c => cardLabel(c, true)).join(', ')}\n`;
+  });
+
+  out += '\n── NEED ──\n';
+  if (!needed.length) out += '  (none)\n';
+  else groupByRarity(needed).forEach(g => {
+    out += `  ${g.rarity}★: ${g.cards.map(c => cardLabel(c)).join(', ')}\n`;
+  });
+
+  return out;
+}
+
+function copyReport() {
+  const text = buildTextReport();
+  navigator.clipboard.writeText(text)
+    .then(() => showToast('Report copied'))
+    .catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta); showToast('Report copied');
+    });
+}
+
+// ── JSON ───────────────────────────────────────────────────────────────────
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'card-album.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('JSON saved');
+}
+
+function importJSON(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      state = initState();
+      mergeState(JSON.parse(ev.target.result));
+      saveState();
+      buildUI();
+      showToast('Album loaded');
+    } catch { showToast('Error: invalid JSON file'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ── CLEAR ALL ──────────────────────────────────────────────────────────────
+function openClearConfirm() {
+  document.getElementById('confirm-overlay').classList.add('open');
+}
+function closeClearConfirm() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+}
+function confirmClearAll() {
+  localStorage.removeItem(LS_KEY);
+  state = initState();
+  buildUI();
+  closeClearConfirm();
+  showToast('All data cleared');
+}
+
+// ── UTILS ──────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeExport(); });
+document.getElementById('export-panel').addEventListener('click', e => {
+  if (e.target === document.getElementById('export-panel')) closeExport();
+});
+
+loadState();
+buildUI();
+</script>
+</body>
+</html>
