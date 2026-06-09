@@ -6,7 +6,7 @@ A single-file, offline-friendly web tool for tracking your card collection in **
 
 ---
 
-## How to use
+## How to use (DESKTOP ONLY!!!!)
 
 1. Download `card-album-tracker.html` from this repository.
 2. Open it in any modern browser (Chrome, Firefox, Safari, Edge).

@@ -529,7 +529,7 @@
         },
         {
           "num": 61,
-          "name": "?????",
+          "name": "Wet Bird",
           "rarity": 3,
           "golden": false,
           "owned": null,
@@ -545,7 +545,7 @@
         },
         {
           "num": 63,
-          "name": "?????",
+          "name": "I've Got You!",
           "rarity": 4,
           "golden": false,
           "owned": null,
@@ -616,7 +616,7 @@
         },
         {
           "num": 71,
-          "name": "",
+          "name": "Wishing Star",
           "rarity": 3,
           "golden": false,
           "owned": null,
@@ -624,7 +624,7 @@
         },
         {
           "num": 72,
-          "name": "",
+          "name": "Frug Fantasies",
           "rarity": 4,
           "golden": true,
           "owned": null,
@@ -766,7 +766,7 @@
         },
         {
           "num": 88,
-          "name": "?????",
+          "name": "Tug of War",
           "rarity": 4,
           "golden": true,
           "owned": null,
@@ -782,7 +782,7 @@
         },
         {
           "num": 90,
-          "name": "?????",
+          "name": "Spring Sunshine",
           "rarity": 5,
           "golden": false,
           "owned": null,
@@ -791,7 +791,7 @@
       ]
     },
     {
-      "name": "Zapur Set",
+      "name": "Zappur Set",
       "rewardAmount": "10",
       "rewardType": "Bento Boxes",
       "cards": [
@@ -837,7 +837,7 @@
         },
         {
           "num": 96,
-          "name": "?????",
+          "name": "Jungle Prowl",
           "rarity": 4,
           "golden": false,
           "owned": null,
@@ -845,7 +845,7 @@
         },
         {
           "num": 97,
-          "name": "?????",
+          "name": "New King",
           "rarity": 4,
           "golden": false,
           "owned": null,
@@ -853,7 +853,7 @@
         },
         {
           "num": 98,
-          "name": "?????",
+          "name": "Blitz Unleashed",
           "rarity": 4,
           "golden": true,
           "owned": null,
@@ -861,7 +861,7 @@
         },
         {
           "num": 99,
-          "name": "?????",
+          "name": "A New Reign",
           "rarity": 5,
           "golden": true,
           "owned": null,
@@ -892,7 +892,7 @@
         },
         {
           "num": 102,
-          "name": "?????",
+          "name": "DIY Habitat",
           "rarity": 3,
           "golden": false,
           "owned": null,
@@ -908,7 +908,7 @@
         },
         {
           "num": 104,
-          "name": "?????",
+          "name": "Smashing Waves",
           "rarity": 4,
           "golden": false,
           "owned": null,
@@ -916,7 +916,7 @@
         },
         {
           "num": 105,
-          "name": "?????",
+          "name": "Gym Pics",
           "rarity": 4,
           "golden": true,
           "owned": null,
@@ -932,7 +932,7 @@
         },
         {
           "num": 107,
-          "name": "?????",
+          "name": "Shining Knight",
           "rarity": 5,
           "golden": true,
           "owned": null,
@@ -940,7 +940,7 @@
         },
         {
           "num": 108,
-          "name": "?????",
+          "name": "To the Rescue",
           "rarity": 5,
           "golden": false,
           "owned": null,
@@ -973,7 +973,7 @@
           "num": 111,
           "name": "Love-Struck",
           "rarity": 4,
-          "golden": false,
+          "golden": true,
           "owned": null,
           "copies": 0
         },
@@ -995,7 +995,7 @@
         },
         {
           "num": 114,
-          "name": "?????",
+          "name": "Autumn Love",
           "rarity": 4,
           "golden": true,
           "owned": null,
@@ -1003,7 +1003,7 @@
         },
         {
           "num": 115,
-          "name": "?????",
+          "name": "Stone-Stuffed",
           "rarity": 5,
           "golden": false,
           "owned": null,
@@ -1011,7 +1011,7 @@
         },
         {
           "num": 116,
-          "name": "?????",
+          "name": "Tail Swipe",
           "rarity": 5,
           "golden": false,
           "owned": null,
@@ -1019,7 +1019,7 @@
         },
         {
           "num": 117,
-          "name": "?????",
+          "name": "Rockzilla Roar",
           "rarity": 5,
           "golden": true,
           "owned": null,
@@ -1050,7 +1050,7 @@
         },
         {
           "num": 120,
-          "name": "?????",
+          "name": "Tender Leaf",
           "rarity": 4,
           "golden": false,
           "owned": null,
@@ -1060,13 +1060,13 @@
           "num": 121,
           "name": "Rosty Flutter",
           "rarity": 4,
-          "golden": false,
+          "golden": true,
           "owned": null,
           "copies": 0
         },
         {
           "num": 122,
-          "name": "?????",
+          "name": "Sweet Dreams",
           "rarity": 4,
           "golden": false,
           "owned": null,
@@ -1076,7 +1076,7 @@
           "num": 123,
           "name": "Emergence",
           "rarity": 4,
-          "golden": false,
+          "golden": true,
           "owned": null,
           "copies": 0
         },
@@ -1084,13 +1084,13 @@
           "num": 124,
           "name": "Forever Fan",
           "rarity": 5,
-          "golden": false,
+          "golden": true,
           "owned": null,
           "copies": 0
         },
         {
           "num": 125,
-          "name": "?????",
+          "name": "Cozy Bed",
           "rarity": 5,
           "golden": false,
           "owned": null,
@@ -1098,7 +1098,7 @@
         },
         {
           "num": 126,
-          "name": "?????",
+          "name": "Fateful Save",
           "rarity": 5,
           "golden": false,
           "owned": null,
@@ -1145,7 +1145,7 @@
         },
         {
           "num": 131,
-          "name": "?????",
+          "name": "Scent Selection",
           "rarity": 4,
           "golden": true,
           "owned": null,
@@ -1153,7 +1153,7 @@
         },
         {
           "num": 132,
-          "name": "?????",
+          "name": "Frantic Flutter",
           "rarity": 5,
           "golden": true,
           "owned": null,
@@ -1161,7 +1161,7 @@
         },
         {
           "num": 133,
-          "name": "?????",
+          "name": "Rippling Dust",
           "rarity": 5,
           "golden": false,
           "owned": null,
@@ -1169,7 +1169,7 @@
         },
         {
           "num": 134,
-          "name": "?????",
+          "name": "Sneaky Nab",
           "rarity": 5,
           "golden": false,
           "owned": null,
