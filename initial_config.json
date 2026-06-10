@@ -951,7 +951,7 @@
     {
       "name": "Rubblet Set",
       "rewardAmount": "50",
-      "rewardType": "Pinballs",
+      "rewardType": "Capsules",
       "cards": [
         {
           "num": 109,
