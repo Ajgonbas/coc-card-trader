@@ -324,6 +324,66 @@
   .confirm-box h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
   .confirm-box p  { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 18px; }
   .confirm-btns   { display: flex; gap: 8px; justify-content: flex-end; }
+  /* ── COMPARE MODAL ── */
+  #compare-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 400;
+    align-items: center; justify-content: center; padding: 16px;
+  }
+  #compare-overlay.open { display: flex; }
+  .compare-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); width: 100%; max-width: 560px;
+    max-height: 88vh; display: flex; flex-direction: column;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.22);
+  }
+  .compare-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px 12px; border-bottom: 1px solid var(--border);
+  }
+  .compare-header h2 { font-size: 15px; font-weight: 600; flex: 1; }
+  .compare-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+
+  .share-row { display: flex; flex-direction: column; gap: 6px; }
+  .share-row label { font-size: 12px; font-weight: 600; color: var(--text2); }
+  .share-string-box {
+    display: flex; gap: 6px; align-items: center;
+  }
+  .share-string-input {
+    flex: 1; font-family: monospace; font-size: 11px;
+    padding: 6px 8px; border: 1px solid var(--border2);
+    border-radius: var(--radius-sm); background: var(--surface2);
+    color: var(--text); outline: none; min-width: 0;
+    word-break: break-all;
+  }
+  .share-string-input:focus { border-color: var(--accent); }
+  .share-hint { font-size: 11px; color: var(--text3); line-height: 1.5; }
+
+  .compare-divider { border: none; border-top: 1px solid var(--border); }
+
+  .trade-results { display: flex; flex-direction: column; gap: 12px; }
+  .trade-section-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--text3); margin-bottom: 6px;
+  }
+  .trade-pair {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--surface2);
+    font-size: 12px; flex-wrap: wrap;
+  }
+  .trade-pair.golden { border-color: var(--gold-border); background: var(--gold-bg); }
+  .trade-pair.one-way-you  { border-color: var(--trade-border); background: var(--trade-bg); }
+  .trade-pair.one-way-them { border-color: var(--have-border);  background: var(--have-bg); }
+  .trade-you  { color: var(--trade-text); font-weight: 600; }
+  .trade-them { color: var(--have-text);  font-weight: 600; }
+  .trade-arrow { color: var(--text3); font-size: 14px; }
+  .trade-star { color: var(--star-on); font-size: 11px; letter-spacing: -1px; }
+  .no-trades  { font-size: 13px; color: var(--text3); font-style: italic; }
+  .compare-footer {
+    padding: 12px 16px; border-top: 1px solid var(--border);
+    display: flex; gap: 8px; justify-content: flex-end;
+  }
 </style>
 </head>
 <body>
@@ -335,6 +395,7 @@
     <button class="btn danger" onclick="openClearConfirm()">Clear all</button>
     <button class="btn" onclick="document.getElementById('import-input').click()">Import JSON</button>
     <button class="btn" onclick="exportJSON()">Save JSON</button>
+    <button class="btn" onclick="openCompare()">Compare trade</button>
     <button class="btn primary" onclick="openExport()">Export report ↗</button>
   </div>
 </header>
@@ -348,6 +409,53 @@
     <div class="confirm-btns">
       <button class="btn" onclick="closeClearConfirm()">Cancel</button>
       <button class="btn danger" onclick="confirmClearAll()">Yes, clear all</button>
+    </div>
+  </div>
+</div>
+
+<div id="compare-overlay">
+  <div class="compare-box">
+    <div class="compare-header">
+      <h2>Compare &amp; Trade</h2>
+      <button class="close-btn" onclick="closeCompare()">×</button>
+    </div>
+    <div class="compare-body">
+
+      <div class="share-row">
+        <label>YOUR SHARE STRING</label>
+        <div class="share-string-box">
+          <input class="share-string-input" id="my-share-string" readonly placeholder="Generating…">
+          <button class="btn" onclick="copyShareString()">Copy</button>
+        </div>
+        <span class="share-hint">Send this to the person you want to trade with.</span>
+      </div>
+
+      <hr class="compare-divider">
+
+      <div class="share-row">
+        <label>PASTE THEIR STRING</label>
+        <div class="share-string-box">
+          <input class="share-string-input" id="their-share-string" placeholder="Paste their hex string here…">
+          <button class="btn primary" onclick="runCompare()">Compare</button>
+        </div>
+        <span class="share-hint">Paste the string they sent you, then click Compare.</span>
+      </div>
+
+      <hr class="compare-divider">
+
+      <div style="display:flex; align-items:center; gap:8px;">
+        <label class="checkbox-label">
+          <input type="checkbox" id="show-one-sided"> Show one-sided surpluses
+        </label>
+        <span class="share-hint" style="margin-left:4px;">Cards you have that they need (and vice versa), even without a matching swap.</span>
+      </div>
+
+      <hr class="compare-divider">
+
+      <div id="compare-results"></div>
+    </div>
+    <div class="compare-footer">
+      <button class="btn" onclick="closeCompare()">Close</button>
     </div>
   </div>
 </div>
@@ -845,6 +953,264 @@ function confirmClearAll() {
   showToast('All data cleared');
 }
 
+// ── COMPARE & TRADE ────────────────────────────────────────────────────────
+//
+// Encoding: 9 bits per card × 135 cards = 1215 bits
+// Bit layout per card (MSB→LSB):
+//   [8]   owned    (1 = have, 0 = missing)
+//   [7]   golden   (1 = golden)
+//   [6-4] rarity   (0–5, 3 bits)
+//   [3-0] copies   (0–9 clamped, 4 bits)
+//
+// 1215 bits → 153 bytes (padded) → 306 hex chars
+
+const BITS_PER_CARD = 9;
+
+function encodeAlbum() {
+  const allCards = [];
+  state.pages.forEach(p => p.cards.forEach(c => allCards.push(c)));
+
+  const totalBits = allCards.length * BITS_PER_CARD; // 1215
+  const totalBytes = Math.ceil(totalBits / 8);       // 152
+  const buf = new Uint8Array(totalBytes);
+
+  allCards.forEach((c, i) => {
+    const owned   = c.owned === true ? 1 : 0;
+    const golden  = c.golden ? 1 : 0;
+    const rarity  = Math.min(7, Math.max(0, c.rarity || 0));
+    const copies  = Math.min(15, Math.max(0, c.copies || 0));
+    const bits    = (owned << 8) | (golden << 7) | (rarity << 4) | copies;
+
+    const bitPos  = i * BITS_PER_CARD;
+    for (let b = 0; b < BITS_PER_CARD; b++) {
+      const bit     = (bits >> (BITS_PER_CARD - 1 - b)) & 1;
+      const byteIdx = Math.floor((bitPos + b) / 8);
+      const bitIdx  = 7 - ((bitPos + b) % 8);
+      buf[byteIdx] |= (bit << bitIdx);
+    }
+  });
+
+  return Array.from(buf).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function decodeAlbum(hex) {
+  if (!hex || hex.length < 2) throw new Error('Empty string');
+  const buf = new Uint8Array(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
+
+  const cards = [];
+  const count = 135;
+  for (let i = 0; i < count; i++) {
+    let bits = 0;
+    const bitPos = i * BITS_PER_CARD;
+    for (let b = 0; b < BITS_PER_CARD; b++) {
+      const byteIdx = Math.floor((bitPos + b) / 8);
+      const bitIdx  = 7 - ((bitPos + b) % 8);
+      bits = (bits << 1) | ((buf[byteIdx] >> bitIdx) & 1);
+    }
+    cards.push({
+      num:    i + 1,
+      owned:  (bits >> 8) & 1,
+      golden: (bits >> 7) & 1,
+      rarity: (bits >> 4) & 0x7,
+      copies: bits & 0xF,
+    });
+  }
+  return cards;
+}
+
+function openCompare() {
+  document.getElementById('compare-overlay').classList.add('open');
+  document.getElementById('my-share-string').value = encodeAlbum();
+  document.getElementById('their-share-string').value = '';
+  document.getElementById('compare-results').innerHTML = '';
+  document.getElementById('show-one-sided').onchange = renderCompareResults;
+  window._lastCompare = null;
+}
+
+function closeCompare() {
+  document.getElementById('compare-overlay').classList.remove('open');
+}
+
+function copyShareString() {
+  const val = document.getElementById('my-share-string').value;
+  navigator.clipboard.writeText(val)
+    .then(() => showToast('Share string copied'))
+    .catch(() => { showToast('Copy failed — select and copy manually'); });
+}
+
+function runCompare() {
+  const hex = document.getElementById('their-share-string').value.trim().toLowerCase();
+  const resultsEl = document.getElementById('compare-results');
+
+  if (!hex) { resultsEl.innerHTML = `<p class="no-trades">Paste their share string first.</p>`; return; }
+  if (!/^[0-9a-f]+$/.test(hex)) { resultsEl.innerHTML = `<p class="no-trades">Invalid string — must be hex characters only.</p>`; return; }
+
+  let them;
+  try { them = decodeAlbum(hex); }
+  catch(e) { resultsEl.innerHTML = `<p class="no-trades">Could not decode string: ${e.message}</p>`; return; }
+
+  const me = [];
+  state.pages.forEach(p => p.cards.forEach(c => me.push(c)));
+
+  const youCanGive = [], theyCanGive = [];
+  const youCanGiveG = [], theyCanGiveG = [];
+
+  me.forEach((myCard, i) => {
+    const tc = them[i];
+    if (!myCard || !tc) return;
+
+    const myOwned    = myCard.owned === true;
+    const theyOwned  = tc.owned === 1;
+    const mySpare    = myOwned  && myCard.copies > 1;
+    const theySpare  = theyOwned && tc.copies > 1;
+    const myNeed     = !myOwned;
+    const theyNeed   = !theyOwned;
+    const myRarity   = myCard.rarity || 0;
+    const theirRarity = tc.rarity || 0;
+    const myGolden   = !!myCard.golden;
+    const theirGolden = tc.golden === 1;  // decoded as int — fix comparison
+
+    if (mySpare && theyNeed && myRarity > 0) {
+      if (myGolden) youCanGiveG.push({ card: myCard, rarity: myRarity });
+      else          youCanGive.push({  card: myCard, rarity: myRarity });
+    }
+    if (theySpare && myNeed && theirRarity > 0) {
+      if (theirGolden) theyCanGiveG.push({ card: myCard, theirCard: tc, rarity: theirRarity });
+      else             theyCanGive.push({  card: myCard, theirCard: tc, rarity: theirRarity });
+    }
+  });
+
+  // Reciprocal pairs — same rarity, both sides have what the other needs
+  const pairs = [], goldenPairs = [];
+  const usedYou = new Set(), usedThem = new Set();
+  youCanGive.forEach(y => {
+    const match = theyCanGive.find(t => t.rarity === y.rarity && !usedThem.has(t.card.num) && !usedYou.has(y.card.num));
+    if (match) { usedYou.add(y.card.num); usedThem.add(match.card.num); pairs.push({ rarity: y.rarity, youGive: y.card, youGet: match.card }); }
+  });
+  const usedYouG = new Set(), usedThemG = new Set();
+  youCanGiveG.forEach(y => {
+    const match = theyCanGiveG.find(t => t.rarity === y.rarity && !usedThemG.has(t.card.num) && !usedYouG.has(y.card.num));
+    if (match) { usedYouG.add(y.card.num); usedThemG.add(match.card.num); goldenPairs.push({ rarity: y.rarity, youGive: y.card, youGet: match.card }); }
+  });
+
+  // One-sided: exclude cards already used in reciprocal pairs
+  const oneSidedYou  = youCanGive.filter(t => !usedYou.has(t.card.num));
+  const oneSidedThem = theyCanGive.filter(t => !usedThem.has(t.card.num));
+  const oneSidedYouG  = youCanGiveG.filter(t => !usedYouG.has(t.card.num));
+  const oneSidedThemG = theyCanGiveG.filter(t => !usedThemG.has(t.card.num));
+
+  // Store results so checkbox can re-render without recomputing
+  window._lastCompare = { pairs, goldenPairs, oneSidedYou, oneSidedThem, oneSidedYouG, oneSidedThemG };
+  renderCompareResults();
+}
+
+function renderCompareResults() {
+  const data = window._lastCompare;
+  if (!data) return;
+  const { pairs, goldenPairs, oneSidedYou, oneSidedThem, oneSidedYouG, oneSidedThemG } = data;
+  const showOneSided = document.getElementById('show-one-sided').checked;
+  const el = document.getElementById('compare-results');
+
+  const groupByR = (arr) => {
+    const map = {};
+    arr.forEach(p => { if (!map[p.rarity]) map[p.rarity] = []; map[p.rarity].push(p); });
+    return Object.keys(map).sort((a,b) => +a - +b).map(r => ({ rarity: +r, items: map[r] }));
+  };
+
+  const cardStr = (c) => `#${c.num}${c.name ? ' ' + c.name : ''}`;
+  const stars   = (n) => '★'.repeat(n);
+
+  let html = '<div class="trade-results">';
+
+  // ── Reciprocal normal ──
+  if (pairs.length > 0) {
+    html += `<div><div class="trade-section-label">Reciprocal trades</div>`;
+    groupByR(pairs).forEach(g => g.items.forEach(t => {
+      html += `<div class="trade-pair">
+        <span class="trade-star">${stars(g.rarity)}</span>
+        <span class="trade-you">You give: ${cardStr(t.youGive)}</span>
+        <span class="trade-arrow">⇄</span>
+        <span class="trade-them">You get: ${cardStr(t.youGet)}</span>
+      </div>`;
+    }));
+    html += `</div>`;
+  }
+
+  // ── Reciprocal golden ──
+  if (goldenPairs.length > 0) {
+    html += `<div><div class="trade-section-label">✦ Golden reciprocal trades (event only)</div>`;
+    groupByR(goldenPairs).forEach(g => g.items.forEach(t => {
+      html += `<div class="trade-pair golden">
+        <span class="trade-star">${stars(g.rarity)}</span>
+        <span class="trade-you">You give: ${cardStr(t.youGive)}</span>
+        <span class="trade-arrow">⇄</span>
+        <span class="trade-them">You get: ${cardStr(t.youGet)}</span>
+      </div>`;
+    }));
+    html += `</div>`;
+  }
+
+  if (pairs.length === 0 && goldenPairs.length === 0) {
+    html += `<p class="no-trades">No reciprocal trades found.</p>`;
+  }
+
+  // ── One-sided surpluses (optional) ──
+  if (showOneSided) {
+    if (oneSidedYou.length > 0) {
+      html += `<div><div class="trade-section-label" style="margin-top:8px;">You have spare — they need (no return swap)</div>`;
+      groupByR(oneSidedYou).forEach(g => g.items.forEach(t => {
+        html += `<div class="trade-pair one-way-you">
+          <span class="trade-star">${stars(g.rarity)}</span>
+          <span class="trade-you">You give: ${cardStr(t.card)}</span>
+          <span class="trade-arrow">→</span>
+          <span style="color:var(--text2);font-size:12px;">no matching return</span>
+        </div>`;
+      }));
+      html += `</div>`;
+    }
+    if (oneSidedThem.length > 0) {
+      html += `<div><div class="trade-section-label" style="margin-top:8px;">They have spare — you need (no return swap)</div>`;
+      groupByR(oneSidedThem).forEach(g => g.items.forEach(t => {
+        html += `<div class="trade-pair one-way-them">
+          <span class="trade-star">${stars(g.rarity)}</span>
+          <span class="trade-them">You get: ${cardStr(t.card)}</span>
+          <span class="trade-arrow">←</span>
+          <span style="color:var(--text2);font-size:12px;">no matching return</span>
+        </div>`;
+      }));
+      html += `</div>`;
+    }
+    if (oneSidedYouG.length > 0 || oneSidedThemG.length > 0) {
+      html += `<div><div class="trade-section-label" style="margin-top:8px;">✦ One-sided golden surpluses (event only)</div>`;
+      oneSidedYouG.forEach(t => {
+        html += `<div class="trade-pair golden">
+          <span class="trade-star">${stars(t.rarity)}</span>
+          <span class="trade-you">You give: ${cardStr(t.card)}</span>
+          <span class="trade-arrow">→</span>
+          <span style="color:var(--text2);font-size:12px;">no matching return</span>
+        </div>`;
+      });
+      oneSidedThemG.forEach(t => {
+        html += `<div class="trade-pair golden">
+          <span class="trade-star">${stars(t.rarity)}</span>
+          <span class="trade-them">You get: ${cardStr(t.card)}</span>
+          <span class="trade-arrow">←</span>
+          <span style="color:var(--text2);font-size:12px;">no matching return</span>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+    if (oneSidedYou.length === 0 && oneSidedThem.length === 0 && oneSidedYouG.length === 0 && oneSidedThemG.length === 0) {
+      html += `<p class="share-hint" style="margin-top:8px;">No one-sided surpluses either — albums are well matched.</p>`;
+    }
+  }
+
+  const total = pairs.length + goldenPairs.length;
+  html += `<p class="share-hint" style="margin-top:8px;">${total} reciprocal trade${total !== 1 ? 's' : ''} found.</p>`;
+  html += `</div>`;
+  el.innerHTML = html;
+}
+
 // ── UTILS ──────────────────────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg) {
@@ -857,9 +1223,12 @@ function esc(s) {
   return String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeExport(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeExport(); closeCompare(); } });
 document.getElementById('export-panel').addEventListener('click', e => {
   if (e.target === document.getElementById('export-panel')) closeExport();
+});
+document.getElementById('compare-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('compare-overlay')) closeCompare();
 });
 
 loadState();

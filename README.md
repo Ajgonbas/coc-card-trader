@@ -60,6 +60,33 @@ Options at the bottom of the panel:
 - **Copy to clipboard** — copies the report as plain text, ready to paste into Discord or anywhere else.
 - **Save as file** — downloads the report as a `.txt` file.
 
+### Compare trade
+
+Click **Compare trade** in the top bar to open the trade comparison tool. This lets you find possible card swaps with another player without sharing your full album data.
+
+**How it works:**
+
+1. Open the panel — your **share string** is automatically generated from your current album state. It's a short hex code that encodes which cards you own, how many copies you have, their rarity, and whether they're golden. No names, no page labels — just the card data.
+2. Copy your share string and send it to the person you want to trade with (Discord, chat, etc.).
+3. Ask them to do the same — open Compare trade, copy their string, and send it to you.
+4. Paste their string into the **"Paste their string"** field and click **Compare**.
+
+**What it shows:**
+
+By default the tool finds **reciprocal trades** — cards where you have a spare they need *and* they have a spare you need. Trades are only matched at the **same rarity** (e.g. 2★ for 2★, 3★ for 3★). Golden cards are matched separately and only pair with other golden cards, since those can only be traded during special events.
+
+```
+★★★  You give: #42 Cindermunk  ⇄  You get: #17 Sparkrow
+```
+
+**Show one-sided surpluses** — tick this checkbox to also see:
+- Cards you have spare that they need, even if there's no matching return swap.
+- Cards they have spare that you need, even if there's no matching return swap.
+
+This is useful for negotiating outside the tool — e.g. agreeing on a different exchange. Cards already part of a reciprocal trade are excluded from the one-sided list so nothing appears twice.
+
+> The share string is **not a login or account** — it's just a snapshot of your album at that moment. Nothing is sent to any server.
+
 ### Saving and loading
 
 - The tracker **auto-saves to browser localStorage** on every change — closing and reopening the tab restores your data automatically.
@@ -79,8 +106,5 @@ The entire tool is a single self-contained HTML file with no external dependenci
 
 Built by **Kusanagi**.  
 Discord: `kusanagi2k`
-
-[Clash of Critters Wiki](https://clashofcritters.wiki.gg/)
-
 
 Issues, suggestions, or trade requests? Find me on Discord.
