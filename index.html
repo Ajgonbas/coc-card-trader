@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clash of Critters - Card Tracker</title>
+<title>CoC Card Trader</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -98,6 +98,7 @@
     cursor: pointer; white-space: nowrap; transition: background 0.12s;
   }
   .btn:hover { background: var(--surface2); }
+  a.btn { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
   .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
   .btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
 
@@ -547,6 +548,7 @@
     <button class="btn" onclick="exportJSON()">Save JSON</button>
     <button class="btn" onclick="openCompare()">Compare trade</button>
     <button class="btn primary" onclick="openExport()">Export report ↗</button>
+    <a class="btn" href="https://github.com/Ajgonbas/coc-card-trader#readme" target="_blank" rel="noopener">Help</a>
   </div>
   <button class="hamburger-btn" onclick="openMobileMenu()" aria-label="Menu">☰</button>
 </header>
@@ -562,6 +564,7 @@
   <button class="btn" onclick="exportJSON(); closeMobileMenu()">Save JSON</button>
   <button class="btn" onclick="document.getElementById('import-input').click(); closeMobileMenu()">Import JSON</button>
   <button class="btn danger" onclick="openClearConfirm(); closeMobileMenu()">Clear all</button>
+  <a class="btn" href="https://github.com/Ajgonbas/coc-card-trader#readme" target="_blank" rel="noopener" onclick="closeMobileMenu()">Help</a>
 </div>
 
 <input type="file" id="import-input" accept=".json,application/json" onchange="importJSON(event)" style="display:none">
