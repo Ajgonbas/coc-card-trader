@@ -16,7 +16,7 @@ If you prefer to run it offline, download `index.html` from this repository and 
 
 ### Pre-populated starting config
 
-A `initial_config.json` file is included in the repository with set names, card rarities, and rewards already filled in. Download it and use **Import JSON** to load it — most of the album will be pre-populated. Cards with names shown as `?????` are ones that hadn't been identified yet.
+A `initial_config.json` file is included in the repository with set names, card rarities, and rewards already filled in. Download it and use **Import JSON** to load it — most of the album will be pre-populated.
 
 If you know any missing card names or have golden card info, feel free to reach out (contact at the bottom).
 
