@@ -384,6 +384,156 @@
     padding: 12px 16px; border-top: 1px solid var(--border);
     display: flex; gap: 8px; justify-content: flex-end;
   }
+
+  /* ── MOBILE ── */
+  @media (max-width: 640px) {
+    /* Header */
+    header { padding: 10px 14px; gap: 8px; flex-wrap: nowrap; position: sticky; top: 0; }
+    header h1 { font-size: 13px; }
+    .stats-pill { font-size: 11px; padding: 2px 8px; }
+    .header-btns { display: none; } /* replaced by hamburger */
+
+    .hamburger-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: var(--radius-sm);
+      border: 1px solid var(--border2); background: var(--surface);
+      font-size: 18px; cursor: pointer; flex-shrink: 0;
+    }
+
+    /* Mobile menu drawer */
+    #mobile-menu {
+      display: none; position: fixed; top: 0; right: 0; bottom: 0;
+      width: 240px; background: var(--surface); z-index: 500;
+      flex-direction: column; box-shadow: -4px 0 20px rgba(0,0,0,0.2);
+      padding: 16px;
+    }
+    #mobile-menu.open { display: flex; }
+    #mobile-menu-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4); z-index: 499;
+    }
+    #mobile-menu-overlay.open { display: block; }
+    .mobile-menu-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu-header span { font-size: 13px; font-weight: 600; color: var(--text2); }
+    #mobile-menu .btn {
+      width: 100%; text-align: left; padding: 10px 12px;
+      margin-bottom: 6px; font-size: 14px; display: block;
+    }
+    #mobile-menu .btn.primary { text-align: center; }
+
+    /* Main becomes a swipe-view instead of scroll */
+    main { padding: 0; overflow: hidden; height: calc(100vh - 57px); display: flex; flex-direction: column; }
+
+    /* Page nav bar */
+    #page-nav {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px; background: var(--surface);
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .page-nav-btn {
+      width: 34px; height: 34px; border-radius: var(--radius-sm);
+      border: 1px solid var(--border2); background: var(--surface);
+      font-size: 18px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+      transition: background 0.1s;
+    }
+    .page-nav-btn:hover { background: var(--surface2); }
+    .page-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    #page-nav-label { flex: 1; text-align: center; font-size: 13px; font-weight: 600; }
+    #page-nav-sub { font-size: 11px; color: var(--text3); }
+
+    /* Dot strip */
+    #page-dots {
+      display: flex; justify-content: center; gap: 5px;
+      padding: 6px 14px; background: var(--surface);
+      border-bottom: 1px solid var(--border); flex-shrink: 0; flex-wrap: wrap;
+    }
+    .page-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--border2); cursor: pointer; transition: background 0.15s, transform 0.15s;
+      border: none; padding: 0;
+    }
+    .page-dot.active { background: var(--accent); transform: scale(1.3); }
+    .page-dot.has-cards { background: var(--have-border); }
+    .page-dot.active.has-cards { background: var(--accent); }
+
+    /* Page view container */
+    #mobile-page-view {
+      flex: 1; overflow-y: auto; padding: 10px;
+    }
+
+    /* Page header on mobile — stacked */
+    .page-header-top {
+      flex-wrap: wrap; padding: 8px 10px; gap: 6px;
+    }
+    .page-name-input { width: 130px; font-size: 12px; }
+    .reward-label { font-size: 10px; }
+    .reward-amount { width: 48px; font-size: 11px; }
+    .reward-type { font-size: 10px; }
+
+    /* Mobile card grid — 1 column, compact horizontal rows */
+    .cards-grid {
+      grid-template-columns: 1fr;
+      gap: 5px; padding: 6px;
+    }
+
+    .card-tile {
+      flex-direction: row; align-items: center;
+      padding: 6px 8px; gap: 6px; flex-wrap: nowrap;
+    }
+    .card-tile.is-golden { border-color: var(--gold-border); }
+    .card-tile.has-copies { border-color: var(--trade-border); background: var(--trade-bg); }
+
+    /* Card number + name stacked on left */
+    .card-left {
+      display: flex; flex-direction: column; min-width: 0; flex: 1;
+    }
+    .card-top { gap: 3px; }
+    .card-num { font-size: 12px; min-width: 24px; }
+    .card-name-input { font-size: 13px; }
+    .golden-btn { font-size: 14px; }
+
+    /* Stars inline, slightly larger */
+    .stars-row { gap: 2px; }
+    .star-btn { width: 24px; height: 24px; font-size: 18px; }
+
+    /* Status + copies on the right, horizontal */
+    .card-right {
+      display: flex; align-items: center; gap: 5px; flex-shrink: 0;
+    }
+    .status-toggle {
+      width: auto; font-size: 13px; padding: 6px 10px;
+      white-space: nowrap; min-width: 68px;
+    }
+    .copies-row {
+      flex-direction: row; align-items: center; gap: 3px;
+    }
+    .copies-label { display: none; }
+    .copies-controls { margin-left: 0; }
+    .copies-btn { width: 30px; height: 30px; font-size: 18px; }
+    .copies-display { font-size: 13px; min-width: 24px; }
+    .copies-sub { display: none; }
+    .copies-row.locked { opacity: 0.3; }
+
+    /* Modals go full screen on mobile */
+    .export-sheet { max-height: 100vh; border-radius: 0; }
+    #export-panel { align-items: stretch; }
+    .compare-box { max-height: 100vh; border-radius: 0; }
+    #compare-overlay { padding: 0; align-items: stretch; }
+  }
+
+  /* Hide hamburger on desktop */
+  @media (min-width: 641px) {
+    .hamburger-btn { display: none; }
+    #mobile-menu { display: none !important; }
+    #mobile-menu-overlay { display: none !important; }
+    #page-nav { display: none; }
+    #page-dots { display: none; }
+    #mobile-page-view { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -398,9 +548,35 @@
     <button class="btn" onclick="openCompare()">Compare trade</button>
     <button class="btn primary" onclick="openExport()">Export report ↗</button>
   </div>
+  <button class="hamburger-btn" onclick="openMobileMenu()" aria-label="Menu">☰</button>
 </header>
 
+<div id="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
+<div id="mobile-menu">
+  <div class="mobile-menu-header">
+    <span>Menu</span>
+    <button class="close-btn" onclick="closeMobileMenu()">×</button>
+  </div>
+  <button class="btn primary" onclick="openExport(); closeMobileMenu()">Export report ↗</button>
+  <button class="btn" onclick="openCompare(); closeMobileMenu()">Compare trade</button>
+  <button class="btn" onclick="exportJSON(); closeMobileMenu()">Save JSON</button>
+  <button class="btn" onclick="document.getElementById('import-input').click(); closeMobileMenu()">Import JSON</button>
+  <button class="btn danger" onclick="openClearConfirm(); closeMobileMenu()">Clear all</button>
+</div>
+
 <input type="file" id="import-input" accept=".json,application/json" onchange="importJSON(event)" style="display:none">
+
+<!-- Mobile page navigation (hidden on desktop via CSS) -->
+<div id="page-nav">
+  <button class="page-nav-btn" id="page-prev" onclick="mobileNavPage(-1)">‹</button>
+  <div id="page-nav-label">
+    <div id="page-nav-name">Page 1</div>
+    <div id="page-nav-sub"></div>
+  </div>
+  <button class="page-nav-btn" id="page-next" onclick="mobileNavPage(1)">›</button>
+</div>
+<div id="page-dots"></div>
+<div id="mobile-page-view"></div>
 
 <div id="confirm-overlay">
   <div class="confirm-box">
@@ -670,10 +846,20 @@ function buildCardTile(pi, ci, card) {
   );
   // NOTE: refreshCopiesDisplay is called after this tile is in the DOM (see buildUI loop)
 
-  tile.appendChild(top);
-  tile.appendChild(starsRow);
-  tile.appendChild(statusBtn);
-  tile.appendChild(copiesRow);
+  // card-left: number + name + stars (stacks vertically, takes flex space)
+  const cardLeft = document.createElement('div');
+  cardLeft.className = 'card-left';
+  cardLeft.appendChild(top);
+  cardLeft.appendChild(starsRow);
+
+  // card-right: status toggle + copies (shrinks to fit)
+  const cardRight = document.createElement('div');
+  cardRight.className = 'card-right';
+  cardRight.appendChild(statusBtn);
+  cardRight.appendChild(copiesRow);
+
+  tile.appendChild(cardLeft);
+  tile.appendChild(cardRight);
   return tile;
 }
 
@@ -755,7 +941,13 @@ function refreshTileClass(tile, card) {
 function updatePageProgress(pi) {
   const cards = state.pages[pi].cards;
   const owned = cards.filter(c => c.owned === true).length;
-  document.getElementById(`page-prog-${pi}`).textContent = `${owned} / ${CPP}`;
+  const el = document.getElementById(`page-prog-${pi}`);
+  if (el) el.textContent = `${owned} / ${CPP}`;
+  // Mobile: update the nav if this is the current page
+  if (isMobile() && pi === mobilePage) {
+    updateMobilePageProgress();
+    updateMobileNav();
+  }
 }
 
 function updateGlobalStats() {
@@ -1211,6 +1403,125 @@ function renderCompareResults() {
   el.innerHTML = html;
 }
 
+// ── MOBILE ─────────────────────────────────────────────────────────────────
+let mobilePage = 0;
+
+function isMobile() { return window.innerWidth <= 640; }
+
+function openMobileMenu()  { document.getElementById('mobile-menu').classList.add('open'); document.getElementById('mobile-menu-overlay').classList.add('open'); }
+function closeMobileMenu() { document.getElementById('mobile-menu').classList.remove('open'); document.getElementById('mobile-menu-overlay').classList.remove('open'); }
+
+function buildMobileView() {
+  if (!isMobile()) return;
+  const view = document.getElementById('mobile-page-view');
+  view.innerHTML = '';
+  // Build single page section for current mobilePage
+  const pi = mobilePage;
+  const page = state.pages[pi];
+
+  // Page header
+  const header = document.createElement('div');
+  header.className = 'page-header';
+  const typeOptions = REWARD_TYPES.map(t =>
+    `<option value="${esc(t)}" ${page.rewardType === t ? 'selected' : ''}>${esc(t)}</option>`
+  ).join('');
+  const topRow = document.createElement('div');
+  topRow.className = 'page-header-top';
+  topRow.innerHTML = `
+    <input class="page-name-input" type="text" value="${esc(page.name)}" placeholder="Page ${pi+1}">
+    <span class="page-progress" id="mob-page-prog"></span>
+    <span class="reward-label">Reward:</span>
+    <input class="reward-amount" type="number" min="0" step="1" value="${esc(page.rewardAmount)}" placeholder="0" id="mob-ramt">
+    <select class="reward-type" id="mob-rtype">${typeOptions}</select>
+  `;
+  topRow.querySelector('.page-name-input').addEventListener('input', e => {
+    state.pages[pi].name = e.target.value; saveState(); updateMobileNav();
+  });
+  topRow.querySelector('.reward-amount').addEventListener('input', e => {
+    state.pages[pi].rewardAmount = e.target.value; saveState();
+  });
+  topRow.querySelector('.reward-type').addEventListener('change', e => {
+    state.pages[pi].rewardType = e.target.value; saveState();
+  });
+  header.appendChild(topRow);
+
+  // Cards grid
+  const grid = document.createElement('div');
+  grid.className = 'cards-grid';
+  grid.style.borderRadius = '0 0 8px 8px';
+  grid.style.borderTop = 'none';
+  const cardEls = [];
+  page.cards.forEach((card, ci) => {
+    const tile = buildCardTile(pi, ci, card);
+    grid.appendChild(tile);
+    cardEls.push({ ci, card });
+  });
+
+  const section = document.createElement('div');
+  section.appendChild(header);
+  section.appendChild(grid);
+  view.appendChild(section);
+
+  // Refresh copies display now in DOM
+  cardEls.forEach(({ ci, card }) => refreshCopiesDisplay(pi, ci, card));
+  updateMobilePageProgress();
+}
+
+function updateMobileNav() {
+  if (!isMobile()) return;
+  const page = state.pages[mobilePage];
+  document.getElementById('page-nav-name').textContent = page.name || `Page ${mobilePage + 1}`;
+  const owned = page.cards.filter(c => c.owned === true).length;
+  document.getElementById('page-nav-sub').textContent = `${owned} / ${CPP} · ${mobilePage + 1} of ${PAGES}`;
+  document.getElementById('page-prev').disabled = mobilePage === 0;
+  document.getElementById('page-next').disabled = mobilePage === PAGES - 1;
+  // Dots
+  const dots = document.getElementById('page-dots');
+  dots.querySelectorAll('.page-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === mobilePage);
+    const hasCards = state.pages[i].cards.some(c => c.owned === true);
+    dot.classList.toggle('has-cards', hasCards && i !== mobilePage);
+  });
+}
+
+function updateMobilePageProgress() {
+  const el = document.getElementById('mob-page-prog');
+  if (!el) return;
+  const owned = state.pages[mobilePage].cards.filter(c => c.owned === true).length;
+  el.textContent = `${owned} / ${CPP}`;
+}
+
+function mobileNavPage(delta) {
+  mobilePage = Math.max(0, Math.min(PAGES - 1, mobilePage + delta));
+  buildMobileView();
+  updateMobileNav();
+}
+
+function buildMobileDots() {
+  const dots = document.getElementById('page-dots');
+  dots.innerHTML = '';
+  for (let i = 0; i < PAGES; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'page-dot';
+    btn.title = state.pages[i].name || `Page ${i+1}`;
+    btn.addEventListener('click', () => { mobilePage = i; buildMobileView(); updateMobileNav(); });
+    dots.appendChild(btn);
+  }
+}
+
+// Swipe support on mobile page view
+(function() {
+  let startX = 0;
+  document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (!isMobile()) return;
+    if (document.getElementById('export-panel').classList.contains('open')) return;
+    if (document.getElementById('compare-overlay').classList.contains('open')) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 60) mobileNavPage(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+
 // ── UTILS ──────────────────────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg) {
@@ -1223,7 +1534,7 @@ function esc(s) {
   return String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeExport(); closeCompare(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeExport(); closeCompare(); closeMobileMenu(); } });
 document.getElementById('export-panel').addEventListener('click', e => {
   if (e.target === document.getElementById('export-panel')) closeExport();
 });
@@ -1233,6 +1544,23 @@ document.getElementById('compare-overlay').addEventListener('click', e => {
 
 loadState();
 buildUI();
+
+// Mobile init — runs after buildUI so state is ready
+if (isMobile()) {
+  buildMobileDots();
+  buildMobileView();
+  updateMobileNav();
+}
+
+// Re-init on resize crossing the breakpoint
+let _wasMobile = isMobile();
+window.addEventListener('resize', () => {
+  const nowMobile = isMobile();
+  if (nowMobile !== _wasMobile) {
+    _wasMobile = nowMobile;
+    if (nowMobile) { buildMobileDots(); buildMobileView(); updateMobileNav(); }
+  }
+});
 </script>
 </body>
 </html>
