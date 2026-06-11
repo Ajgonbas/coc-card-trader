@@ -311,12 +311,14 @@
   .btn.danger:hover { background: var(--miss-bg); }
 
   /* confirm dialog */
-  #confirm-overlay {
+  #confirm-overlay,
+  #initial-config-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.5); z-index: 400;
     align-items: center; justify-content: center;
   }
-  #confirm-overlay.open { display: flex; }
+  #confirm-overlay.open,
+  #initial-config-overlay.open { display: flex; }
   .confirm-box {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 20px 22px;
@@ -544,6 +546,7 @@
   <span class="stats-pill" id="global-stats">0 / 135 owned</span>
   <div class="header-btns">
     <button class="btn danger" onclick="openClearConfirm()">Clear all</button>
+    <button class="btn danger" onclick="openInitialConfigConfirm()">Load initial config</button>
     <button class="btn" onclick="document.getElementById('import-input').click()">Import JSON</button>
     <button class="btn" onclick="exportJSON()">Save JSON</button>
     <button class="btn" onclick="openCompare()">Compare trade</button>
@@ -563,6 +566,7 @@
   <button class="btn" onclick="openCompare(); closeMobileMenu()">Compare trade</button>
   <button class="btn" onclick="exportJSON(); closeMobileMenu()">Save JSON</button>
   <button class="btn" onclick="document.getElementById('import-input').click(); closeMobileMenu()">Import JSON</button>
+  <button class="btn danger" onclick="openInitialConfigConfirm(); closeMobileMenu()">Load initial config</button>
   <button class="btn danger" onclick="openClearConfirm(); closeMobileMenu()">Clear all</button>
   <a class="btn" href="https://github.com/Ajgonbas/coc-card-trader#readme" target="_blank" rel="noopener" onclick="closeMobileMenu()">Help</a>
 </div>
@@ -588,6 +592,18 @@
     <div class="confirm-btns">
       <button class="btn" onclick="closeClearConfirm()">Cancel</button>
       <button class="btn danger" onclick="confirmClearAll()">Yes, clear all</button>
+    </div>
+  </div>
+</div>
+
+<div id="initial-config-overlay">
+  <div class="confirm-box">
+    <h3>Load initial config?</h3>
+    <p>This will clear all your current data and replace it with the default album configuration (set names, card rarities, rewards).</p>
+    <p style="margin-top:8px; font-size:12px; color:var(--text3);">⚠️ This only works when accessed from <strong>ajgonbas.github.io/coc-card-trader</strong>. If you downloaded the file locally, use <strong>Import JSON</strong> instead and load <code>initial_config.json</code> manually.</p>
+    <div class="confirm-btns" style="margin-top:16px;">
+      <button class="btn" onclick="closeInitialConfigConfirm()">Cancel</button>
+      <button class="btn danger" onclick="confirmLoadInitialConfig()">Yes, load config</button>
     </div>
   </div>
 </div>
@@ -1144,8 +1160,33 @@ function confirmClearAll() {
   localStorage.removeItem(LS_KEY);
   state = initState();
   buildUI();
+  if (isMobile()) { buildMobileDots(); buildMobileView(); updateMobileNav(); }
   closeClearConfirm();
   showToast('All data cleared');
+}
+
+// ── INITIAL CONFIG ─────────────────────────────────────────────────────────
+function openInitialConfigConfirm() {
+  document.getElementById('initial-config-overlay').classList.add('open');
+}
+function closeInitialConfigConfirm() {
+  document.getElementById('initial-config-overlay').classList.remove('open');
+}
+async function confirmLoadInitialConfig() {
+  closeInitialConfigConfirm();
+  try {
+    const resp = await fetch('initial_config.json');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const loaded = await resp.json();
+    state = initState();
+    mergeState(loaded);
+    saveState();
+    buildUI();
+    if (isMobile()) { buildMobileDots(); buildMobileView(); updateMobileNav(); }
+    showToast('Initial config loaded');
+  } catch(e) {
+    showToast('Failed — use Import JSON with initial_config.json instead');
+  }
 }
 
 // ── COMPARE & TRADE ────────────────────────────────────────────────────────
@@ -1537,7 +1578,7 @@ function esc(s) {
   return String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeExport(); closeCompare(); closeMobileMenu(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeExport(); closeCompare(); closeMobileMenu(); closeClearConfirm(); closeInitialConfigConfirm(); } });
 document.getElementById('export-panel').addEventListener('click', e => {
   if (e.target === document.getElementById('export-panel')) closeExport();
 });

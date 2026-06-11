@@ -16,7 +16,7 @@ If you prefer to run it offline, download `index.html` from this repository and 
 
 ### Pre-populated starting config
 
-A `initial_config.json` file is included in the repository with set names, card rarities, and rewards already filled in. Download it and use **Import JSON** to load it — most of the album will be pre-populated.
+A `initial_config.json` file is included in the repository with set names, card rarities, and rewards already filled in. Download it and use **Import JSON** to load it — most of the album will be pre-populated. Cards with names shown as `?????` are ones that hadn't been identified yet.
 
 If you know any missing card names or have golden card info, feel free to reach out (contact at the bottom).
 
@@ -92,6 +92,7 @@ Cards already part of a reciprocal trade are excluded from the one-sided list so
 - The tracker **auto-saves to browser localStorage** on every change — closing and reopening the tab restores your data automatically.
 - **Save JSON** downloads a portable backup file you can move between devices.
 - **Import JSON** loads a previously saved file and restores your full album state.
+- **Load initial config** resets everything and fetches the default album configuration (set names, rarities, rewards) from the hosted version. A confirmation dialog explains this before proceeding. ⚠️ This only works at [ajgonbas.github.io/coc-card-trader](https://ajgonbas.github.io/coc-card-trader) — if you're running the file locally, use **Import JSON** and load `initial_config.json` manually instead.
 - **Clear all** wipes everything — both the in-page state and localStorage. A confirmation dialog appears before anything is deleted. Save a JSON backup first if needed.
 
 ---
