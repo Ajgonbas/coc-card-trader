@@ -427,8 +427,8 @@
     }
     #mobile-menu .btn.primary { text-align: center; }
 
-    /* Main becomes a swipe-view instead of scroll */
-    main { padding: 0; overflow: hidden; height: calc(100vh - 57px); display: flex; flex-direction: column; }
+    /* Hide the desktop main entirely on mobile — mobile-page-view handles content */
+    main { display: none !important; }
 
     /* Page nav bar */
     #page-nav {
@@ -463,9 +463,13 @@
     .page-dot.has-cards { background: var(--have-border); }
     .page-dot.active.has-cards { background: var(--accent); }
 
-    /* Page view container */
+    /* Page view container — fills remaining viewport below header+nav+dots */
     #mobile-page-view {
-      flex: 1; overflow-y: auto; padding: 10px;
+      overflow-y: auto;
+      padding: 10px;
+      /* header ~57px, page-nav ~52px, dots ~29px */
+      height: calc(100vh - 138px);
+      box-sizing: border-box;
     }
 
     /* Page header on mobile — stacked */
@@ -528,7 +532,7 @@
     #compare-overlay { padding: 0; align-items: stretch; }
   }
 
-  /* Hide hamburger on desktop */
+  /* Hide hamburger and mobile-only elements on desktop */
   @media (min-width: 641px) {
     .hamburger-btn { display: none; }
     #mobile-menu { display: none !important; }
@@ -536,6 +540,7 @@
     #page-nav { display: none; }
     #page-dots { display: none; }
     #mobile-page-view { display: none; }
+    main { display: block; }
   }
 </style>
 </head>
