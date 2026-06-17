@@ -240,12 +240,12 @@
   .copies-sub.tradeable { color: var(--trade-text); font-weight: 600; }
 
   /* ── EXPORT PANEL ── */
-  #export-panel {
+  #trade-panel {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.5); z-index: 200;
     align-items: flex-end; justify-content: center;
   }
-  #export-panel.open { display: flex; }
+  #trade-panel.open { display: flex; }
   .export-sheet {
     background: var(--surface); border-radius: var(--radius) var(--radius) 0 0;
     width: 100%; max-width: 700px; max-height: 80vh;
@@ -284,6 +284,14 @@
   .export-pill.need   { background: var(--miss-bg);  border-color: var(--miss-border);  color: var(--miss-text); }
   .export-pill.golden { background: var(--gold-bg);  border-color: var(--gold-border);  color: var(--gold-text); }
   .empty-msg { font-size: 13px; color: var(--text3); font-style: italic; }
+
+  /* Plain-text style report */
+  .report-wrap { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+  .report-header { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+  .report-section { margin-bottom: 14px; }
+  .report-section-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+  .report-line { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 2px; font-family: monospace; }
+  .report-stars { color: var(--star-on); font-weight: 600; }
   .export-footer {
     padding: 12px 16px; border-top: 1px solid var(--border);
     display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
@@ -312,13 +320,15 @@
 
   /* confirm dialog */
   #confirm-overlay,
-  #initial-config-overlay {
+  #initial-config-overlay,
+  #empty-state-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.5); z-index: 400;
     align-items: center; justify-content: center;
   }
   #confirm-overlay.open,
-  #initial-config-overlay.open { display: flex; }
+  #initial-config-overlay.open,
+  #empty-state-overlay.open { display: flex; }
   .confirm-box {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 20px 22px;
@@ -327,25 +337,8 @@
   .confirm-box h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
   .confirm-box p  { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 18px; }
   .confirm-btns   { display: flex; gap: 8px; justify-content: flex-end; }
-  /* ── COMPARE MODAL ── */
-  #compare-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.5); z-index: 400;
-    align-items: center; justify-content: center; padding: 16px;
-  }
-  #compare-overlay.open { display: flex; }
-  .compare-box {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); width: 100%; max-width: 560px;
-    max-height: 88vh; display: flex; flex-direction: column;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.22);
-  }
-  .compare-header {
-    display: flex; align-items: center; gap: 10px;
-    padding: 14px 16px 12px; border-bottom: 1px solid var(--border);
-  }
-  .compare-header h2 { font-size: 15px; font-weight: 600; flex: 1; }
-  .compare-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  /* ── COMPARE (inside trade panel) ── */
+  .compare-body { display: flex; flex-direction: column; gap: 14px; }
 
   .share-row { display: flex; flex-direction: column; gap: 6px; }
   .share-row label { font-size: 12px; font-weight: 600; color: var(--text2); }
@@ -525,11 +518,9 @@
     .copies-sub { display: none; }
     .copies-row.locked { opacity: 0.3; }
 
-    /* Modals go full screen on mobile */
+    /* Trade panel goes full screen on mobile */
     .export-sheet { max-height: 100vh; border-radius: 0; }
-    #export-panel { align-items: stretch; }
-    .compare-box { max-height: 100vh; border-radius: 0; }
-    #compare-overlay { padding: 0; align-items: stretch; }
+    #trade-panel { align-items: stretch; }
   }
 
   /* Hide hamburger and mobile-only elements on desktop */
@@ -551,11 +542,10 @@
   <span class="stats-pill" id="global-stats">0 / 135 owned</span>
   <div class="header-btns">
     <button class="btn danger" onclick="openClearConfirm()">Clear all</button>
-    <button class="btn danger" onclick="openInitialConfigConfirm()">Load initial config</button>
-    <button class="btn" onclick="document.getElementById('import-input').click()">Import JSON</button>
-    <button class="btn" onclick="exportJSON()">Save JSON</button>
-    <button class="btn" onclick="openCompare()">Compare trade</button>
-    <button class="btn primary" onclick="openExport()">Export report ↗</button>
+    <button class="btn" onclick="openInitialConfigConfirm()">Load initial config</button>
+    <button class="btn" onclick="document.getElementById('import-input').click()">Load Album</button>
+    <button class="btn" onclick="exportJSON()">Save Album</button>
+    <button class="btn primary" onclick="openTradePanel('report')">Make Card Trade</button>
     <a class="btn" href="https://github.com/Ajgonbas/coc-card-trader#readme" target="_blank" rel="noopener">Help</a>
   </div>
   <button class="hamburger-btn" onclick="openMobileMenu()" aria-label="Menu">☰</button>
@@ -567,11 +557,10 @@
     <span>Menu</span>
     <button class="close-btn" onclick="closeMobileMenu()">×</button>
   </div>
-  <button class="btn primary" onclick="openExport(); closeMobileMenu()">Export report ↗</button>
-  <button class="btn" onclick="openCompare(); closeMobileMenu()">Compare trade</button>
-  <button class="btn" onclick="exportJSON(); closeMobileMenu()">Save JSON</button>
-  <button class="btn" onclick="document.getElementById('import-input').click(); closeMobileMenu()">Import JSON</button>
-  <button class="btn danger" onclick="openInitialConfigConfirm(); closeMobileMenu()">Load initial config</button>
+  <button class="btn primary" onclick="openTradePanel('report'); closeMobileMenu()">Make Card Trade</button>
+  <button class="btn" onclick="exportJSON(); closeMobileMenu()">Save Album</button>
+  <button class="btn" onclick="document.getElementById('import-input').click(); closeMobileMenu()">Load Album</button>
+  <button class="btn" onclick="openInitialConfigConfirm(); closeMobileMenu()">Load initial config</button>
   <button class="btn danger" onclick="openClearConfirm(); closeMobileMenu()">Clear all</button>
   <a class="btn" href="https://github.com/Ajgonbas/coc-card-trader#readme" target="_blank" rel="noopener" onclick="closeMobileMenu()">Help</a>
 </div>
@@ -603,87 +592,98 @@
 
 <div id="initial-config-overlay">
   <div class="confirm-box">
-    <h3>Load initial config?</h3>
-    <p>This will clear all your current data and replace it with the default album configuration (set names, card rarities, rewards).</p>
-    <p style="margin-top:8px; font-size:12px; color:var(--text3);">⚠️ This only works when accessed from <strong>ajgonbas.github.io/coc-card-trader</strong>. If you downloaded the file locally, use <strong>Import JSON</strong> instead and load <code>initial_config.json</code> manually.</p>
+    <h3 id="ic-title">Load initial config?</h3>
+    <p id="ic-message">This will refresh set names, card rarities, and rewards from the default configuration. Your card status (Have/Missing) and copy counts are <strong>not affected</strong>.</p>
+    <p style="margin-top:8px; font-size:12px; color:var(--text3);">⚠️ This only works when accessed from <strong>ajgonbas.github.io/coc-card-trader</strong>. If you downloaded the file locally, use <strong>Load Album</strong> instead and load <code>initial_config.json</code> manually.</p>
     <div class="confirm-btns" style="margin-top:16px;">
       <button class="btn" onclick="closeInitialConfigConfirm()">Cancel</button>
-      <button class="btn danger" onclick="confirmLoadInitialConfig()">Yes, load config</button>
+      <button class="btn primary" onclick="confirmLoadInitialConfig()">Yes, load config</button>
     </div>
   </div>
 </div>
 
-<div id="compare-overlay">
-  <div class="compare-box">
-    <div class="compare-header">
-      <h2>Compare &amp; Trade</h2>
-      <button class="close-btn" onclick="closeCompare()">×</button>
+<div id="empty-state-overlay">
+  <div class="confirm-box">
+    <h3>No card data found</h3>
+    <p>It looks like this album is empty. You might want to load the initial configuration to get set names, rarities, and rewards pre-filled.</p>
+    <p style="margin-top:8px; font-size:12px; color:var(--text3);">⚠️ Only works at <strong>ajgonbas.github.io/coc-card-trader</strong>. If running locally, use <strong>Load Album</strong> with <code>initial_config.json</code> instead.</p>
+    <div class="confirm-btns" style="margin-top:16px;">
+      <button class="btn" onclick="closeEmptyStatePrompt()">Not now</button>
+      <button class="btn primary" onclick="closeEmptyStatePrompt(); openInitialConfigConfirm()">Load initial config</button>
     </div>
-    <div class="compare-body">
+  </div>
+</div>
 
-      <div class="share-row">
-        <label>YOUR SHARE STRING</label>
-        <div class="share-string-box">
-          <input class="share-string-input" id="my-share-string" readonly placeholder="Generating…">
-          <button class="btn" onclick="copyShareString()">Copy</button>
+<div id="trade-panel">
+  <div class="export-sheet">
+    <div class="export-header">
+      <h2>Make Card Trade</h2>
+      <button class="close-btn" onclick="closeTradePanel()">×</button>
+    </div>
+    <div class="tab-row">
+      <button class="tab-btn active" id="tab-btn-report" onclick="switchTradeTab('report')">Report</button>
+      <button class="tab-btn" id="tab-btn-compare" onclick="switchTradeTab('compare')">Compare Trade</button>
+    </div>
+
+    <!-- REPORT TAB -->
+    <div id="trade-tab-report" class="export-body">
+      <div id="report-body"></div>
+    </div>
+
+    <!-- COMPARE TAB -->
+    <div id="trade-tab-compare" class="export-body" style="display:none;">
+      <div class="compare-body" style="padding:0; overflow:visible; flex:none;">
+        <div class="share-row">
+          <label>YOUR SHARE STRING</label>
+          <div class="share-string-box">
+            <input class="share-string-input" id="my-share-string" readonly placeholder="Generating…">
+            <button class="btn" onclick="copyShareString()">Copy</button>
+          </div>
+          <span class="share-hint">Send this to the person you want to trade with.</span>
         </div>
-        <span class="share-hint">Send this to the person you want to trade with.</span>
-      </div>
-
-      <hr class="compare-divider">
-
-      <div class="share-row">
-        <label>PASTE THEIR STRING</label>
-        <div class="share-string-box">
-          <input class="share-string-input" id="their-share-string" placeholder="Paste their hex string here…">
-          <button class="btn primary" onclick="runCompare()">Compare</button>
+        <hr class="compare-divider">
+        <div class="share-row">
+          <label>PASTE THEIR STRING</label>
+          <div class="share-string-box">
+            <input class="share-string-input" id="their-share-string" placeholder="Paste their hex string here…">
+            <button class="btn primary" onclick="runCompare()">Compare</button>
+          </div>
+          <span class="share-hint">Paste the string they sent you, then click Compare.</span>
         </div>
-        <span class="share-hint">Paste the string they sent you, then click Compare.</span>
+        <hr class="compare-divider">
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <label class="checkbox-label">
+            <input type="checkbox" id="show-one-sided"> Show one-sided surpluses
+          </label>
+          <span class="share-hint">Cards you have that they need (and vice versa), even without a matching swap.</span>
+        </div>
+        <hr class="compare-divider">
+        <div id="compare-results"></div>
       </div>
+    </div>
 
-      <hr class="compare-divider">
-
-      <div style="display:flex; align-items:center; gap:8px;">
+    <div class="export-footer">
+      <!-- Report tab footer -->
+      <div id="report-footer" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; width:100%;">
         <label class="checkbox-label">
-          <input type="checkbox" id="show-one-sided"> Show one-sided surpluses
+          <input type="checkbox" id="show-names-chk" onchange="renderReport()"> Show card names
         </label>
-        <span class="share-hint" style="margin-left:4px;">Cards you have that they need (and vice versa), even without a matching swap.</span>
+        <label class="checkbox-label">
+          <input type="checkbox" id="show-golden-chk" onchange="renderReport()"> Show Golden cards
+        </label>
+        <div class="spacer"></div>
+        <button class="btn" onclick="copyReport()">Copy to clipboard</button>
+        <button class="btn" onclick="saveReportFile()">Save as file</button>
       </div>
-
-      <hr class="compare-divider">
-
-      <div id="compare-results"></div>
-    </div>
-    <div class="compare-footer">
-      <button class="btn" onclick="closeCompare()">Close</button>
+      <!-- Compare tab footer -->
+      <div id="compare-footer" style="display:none; width:100%; justify-content:flex-end;">
+        <button class="btn" onclick="closeTradePanel()">Close</button>
+      </div>
     </div>
   </div>
 </div>
 
 <main id="main-content"></main>
-
-<div id="export-panel">
-  <div class="export-sheet">
-    <div class="export-header">
-      <h2>Trade &amp; Need report</h2>
-      <button class="close-btn" onclick="closeExport()">×</button>
-    </div>
-    <div class="tab-row">
-      <button class="tab-btn active" onclick="switchTab('trade')">To trade</button>
-      <button class="tab-btn" onclick="switchTab('gold')">Golden (event)</button>
-      <button class="tab-btn" onclick="switchTab('need')">Need</button>
-    </div>
-    <div class="export-body" id="export-body"></div>
-    <div class="export-footer">
-      <label class="checkbox-label">
-        <input type="checkbox" id="hide-names-chk" onchange="renderExportTab(activeTab)"> Hide card names
-      </label>
-      <div class="spacer"></div>
-      <button class="btn" onclick="copyReport()">Copy to clipboard</button>
-      <button class="btn" onclick="saveReportFile()">Save as file</button>
-    </div>
-  </div>
-</div>
 
 <div id="toast"></div>
 
@@ -695,7 +695,7 @@ const LS_KEY = 'card-album-v2';
 const REWARD_TYPES = ['Pinballs', 'Bento Boxes', 'Capsules', 'Wishboxes'];
 
 let state = initState();
-let activeTab = 'trade';
+let activeTradeTabState = 'report'; // kept for clarity, not heavily used
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 function initState() {
@@ -728,6 +728,27 @@ function mergeState(loaded) {
       // migrate old 'dupes' field: dupes=1 meant 1 tradeable → copies=2
       if (lc.copies !== undefined) c.copies = lc.copies;
       else if (lc.dupes !== undefined) c.copies = lc.dupes > 0 ? lc.dupes + 1 : 0;
+    });
+  });
+}
+
+// Non-destructive merge: only touches name/rarity/golden/reward metadata.
+// Leaves owned/copies completely untouched — used by "Load initial config"
+// so refreshing the base data never wipes the user's trade progress.
+function mergeMetadataOnly(loaded) {
+  if (!loaded.pages) return;
+  loaded.pages.forEach((lp, pi) => {
+    if (!state.pages[pi]) return;
+    if (lp.name)         state.pages[pi].name = lp.name;
+    if (lp.rewardAmount !== undefined) state.pages[pi].rewardAmount = lp.rewardAmount;
+    if (lp.rewardType   !== undefined) state.pages[pi].rewardType   = lp.rewardType;
+    if (lp.cards) lp.cards.forEach((lc, ci) => {
+      if (!state.pages[pi].cards[ci]) return;
+      const c = state.pages[pi].cards[ci];
+      if (lc.name   !== undefined) c.name   = lc.name;
+      if (lc.rarity !== undefined) c.rarity = lc.rarity;
+      if (lc.golden !== undefined) c.golden = lc.golden;
+      // owned and copies intentionally NOT touched here
     });
   });
 }
@@ -918,6 +939,12 @@ function cycleOwned(pi, ci) {
   updatePageProgress(pi);
   updateGlobalStats();
   saveState();
+
+  // Card has no rarity set — it won't show up in the trade report or compare
+  // tool. Nudge toward loading the initial config to fill in the metadata.
+  if (!card.rarity || card.rarity < 1) {
+    openInitialConfigConfirm('unconfigured-card');
+  }
 }
 
 function changeCopies(pi, ci, delta) {
@@ -980,30 +1007,48 @@ function updateGlobalStats() {
   document.getElementById('global-stats').textContent = `${owned} / ${TOTAL} owned`;
 }
 
-// ── EXPORT ─────────────────────────────────────────────────────────────────
-function openExport() {
-  document.getElementById('export-panel').classList.add('open');
-  renderExportTab(activeTab);
-}
-function closeExport() {
-  document.getElementById('export-panel').classList.remove('open');
-}
-function switchTab(tab) {
-  activeTab = tab;
-  document.querySelectorAll('.tab-btn').forEach((b, i) => {
-    b.classList.toggle('active', ['trade','gold','need'][i] === tab);
-  });
-  renderExportTab(tab);
+// ── TRADE PANEL ────────────────────────────────────────────────────────────
+function openTradePanel(tab) {
+  document.getElementById('trade-panel').classList.add('open');
+  switchTradeTab(tab || 'report');
+  document.getElementById('my-share-string').value = encodeAlbum();
+  document.getElementById('show-one-sided').onchange = renderCompareResults;
+  window._lastCompare = null;
 }
 
+function closeTradePanel() {
+  document.getElementById('trade-panel').classList.remove('open');
+}
+
+function switchTradeTab(tab) {
+  document.getElementById('tab-btn-report').classList.toggle('active', tab === 'report');
+  document.getElementById('tab-btn-compare').classList.toggle('active', tab === 'compare');
+  document.getElementById('trade-tab-report').style.display  = tab === 'report'  ? '' : 'none';
+  document.getElementById('trade-tab-compare').style.display = tab === 'compare' ? '' : 'none';
+  document.getElementById('report-footer').style.display  = tab === 'report'  ? 'flex' : 'none';
+  document.getElementById('compare-footer').style.display = tab === 'compare' ? 'flex' : 'none';
+  if (tab === 'report') renderReport();
+}
+
+// Back-compat aliases (old onclick references, Escape handler)
+function openExport()   { openTradePanel('report'); }
+function closeExport()  { closeTradePanel(); }
+function openCompare()  { openTradePanel('compare'); }
+function closeCompare() { closeTradePanel(); }
+
 function collectData() {
-  const tradeable = [], golden = [], needed = [];
+  const tradeable = [], golden = [], needed = [], goldenNeeded = [];
   state.pages.forEach(page => {
     page.cards.forEach(card => {
+      // Cards without a rarity assigned aren't fully configured — exclude from trading
+      if (!card.rarity || card.rarity < 1) return;
+
       const tradCount = Math.max(0, card.copies - 1);
       const isOwned = card.owned === true;
       if (!isOwned) {
-        needed.push({ ...card, page: page.name });
+        const entry = { ...card, page: page.name };
+        if (card.golden) goldenNeeded.push(entry);
+        else needed.push(entry);
       } else if (tradCount > 0) {
         const entry = { ...card, tradeCount: tradCount, page: page.name };
         if (card.golden) golden.push(entry);
@@ -1011,7 +1056,7 @@ function collectData() {
       }
     });
   });
-  return { tradeable, golden, needed };
+  return { tradeable, golden, needed, goldenNeeded };
 }
 
 function groupByRarity(arr) {
@@ -1024,83 +1069,72 @@ function groupByRarity(arr) {
   return Object.keys(map).sort((a,b) => +a - +b).map(k => ({ rarity: +k, cards: map[k] }));
 }
 
-function starStr(n) { return n ? '★'.repeat(n) : '?'; }
-
-function hideNames() {
-  const chk = document.getElementById('hide-names-chk');
-  return chk ? chk.checked : false;
+// ── REPORT ─────────────────────────────────────────────────────────────────
+function reportLabel(c, showNames) {
+  return (showNames && c.name) ? `${c.num} ${c.name}` : `${c.num}`;
 }
 
-function cardLabel(c, showTrade = false, noNames = false) {
-  const name = (!noNames && c.name) ? ` ${c.name}` : '';
-  const trade = showTrade && c.tradeCount > 1 ? ` ×${c.tradeCount}` : '';
-  return `#${c.num}${name}${trade}`;
-}
+function buildReportSections() {
+  const { tradeable, golden, needed, goldenNeeded } = collectData();
+  const showNames  = document.getElementById('show-names-chk').checked;
+  const showGolden = document.getElementById('show-golden-chk').checked;
+  const starsStr = (n) => '★'.repeat(n || 1);
 
-function renderExportTab(tab) {
-  const { tradeable, golden, needed } = collectData();
-  const body = document.getElementById('export-body');
-  const noNames = hideNames();
-  if (tab === 'trade') {
-    body.innerHTML = renderGrouped(tradeable, 'trade', true, noNames,
-      'Normal duplicates available to trade');
-  } else if (tab === 'gold') {
-    body.innerHTML = renderGrouped(golden, 'golden', true, noNames,
-      'Golden duplicates — trade during special events only');
-  } else {
-    body.innerHTML = renderGrouped(needed, 'need', false, noNames,
-      'Cards you still need');
-  }
-}
+  const sections = [];
 
-function renderGrouped(cards, pillClass, showTrade, noNames, title) {
-  if (!cards.length) return `<p class="empty-msg">Nothing to show here yet.</p>`;
-  const groups = groupByRarity(cards);
-  let html = `<div class="export-section"><h3>${title}</h3>`;
-  groups.forEach(g => {
-    html += `<div class="export-group">
-      <div class="export-group-label">${starStr(g.rarity)} (${g.rarity || '?'}★) — ${g.cards.length} card${g.cards.length !== 1 ? 's' : ''}</div>
-      <div class="export-pills">`;
-    g.cards.forEach(c => {
-      html += `<span class="export-pill ${pillClass}">${cardLabel(c, showTrade, noNames)}</span>`;
+  if (needed.length) {
+    sections.push({
+      title: '🔍 LF (Looking For):',
+      lines: groupByRarity(needed).map(g => `${starsStr(g.rarity)}: ${g.cards.map(c => reportLabel(c, showNames)).join(', ')}`)
     });
-    html += `</div></div>`;
+  }
+  if (tradeable.length) {
+    sections.push({
+      title: '📦 FT (For Trade):',
+      lines: groupByRarity(tradeable).map(g => `${starsStr(g.rarity)}: ${g.cards.map(c => reportLabel(c, showNames)).join(', ')}`)
+    });
+  }
+  if (showGolden && golden.length) {
+    sections.push({
+      title: '✦ Golden FT (event only):',
+      lines: groupByRarity(golden).map(g => `${starsStr(g.rarity)}: ${g.cards.map(c => reportLabel(c, showNames)).join(', ')}`)
+    });
+  }
+  if (showGolden && goldenNeeded.length) {
+    sections.push({
+      title: '✦ Golden LF (event only):',
+      lines: groupByRarity(goldenNeeded).map(g => `${starsStr(g.rarity)}: ${g.cards.map(c => reportLabel(c, showNames)).join(', ')}`)
+    });
+  }
+  return sections;
+}
+
+function renderReport() {
+  const sections = buildReportSections();
+  const body = document.getElementById('report-body');
+  if (!sections.length) {
+    body.innerHTML = `<p class="empty-msg">No data yet — mark cards as Have or Missing to generate a report.</p>`;
+    return;
+  }
+  let html = `<div class="report-header">CoC Card Trade</div>`;
+  sections.forEach(s => {
+    html += `<div class="report-section"><div class="report-section-title">${esc(s.title)}</div>`;
+    s.lines.forEach(line => { html += `<div class="report-line">${esc(line)}</div>`; });
+    html += `</div>`;
   });
-  html += `</div>`;
-  return html;
+  body.innerHTML = html;
 }
 
 function buildTextReport() {
-  const { tradeable, golden, needed } = collectData();
-  const noNames = hideNames();
-  const sections = [];
-
-  if (tradeable.length) {
-    let s = '── TO TRADE (normal) ──\n';
-    groupByRarity(tradeable).forEach(g => {
-      s += `  ${g.rarity}★: ${g.cards.map(c => cardLabel(c, true, noNames)).join(', ')}\n`;
-    });
-    sections.push(s);
-  }
-
-  if (golden.length) {
-    let s = '── TO TRADE (golden — event only) ──\n';
-    groupByRarity(golden).forEach(g => {
-      s += `  ${g.rarity}★: ${g.cards.map(c => cardLabel(c, true, noNames)).join(', ')}\n`;
-    });
-    sections.push(s);
-  }
-
-  if (needed.length) {
-    let s = '── NEED ──\n';
-    groupByRarity(needed).forEach(g => {
-      s += `  ${g.rarity}★: ${g.cards.map(c => cardLabel(c, false, noNames)).join(', ')}\n`;
-    });
-    sections.push(s);
-  }
-
+  const sections = buildReportSections();
   if (!sections.length) return 'No data to report yet.';
-  return '=== CLASH OF CRITTERS — CARD TRACKER REPORT ===\n\n' + sections.join('\n');
+  const lines = ['** CoC Card Trade **', ''];
+  sections.forEach(s => {
+    lines.push(s.title);
+    lines.push(...s.lines);
+    lines.push('');
+  });
+  return lines.join('\n').trim();
 }
 
 function copyReport() {
@@ -1126,15 +1160,15 @@ function saveReportFile() {
   showToast('Report saved');
 }
 
-// ── JSON ───────────────────────────────────────────────────────────────────
+// ── JSON (Load/Save Album) ────────────────────────────────────────────────
 function exportJSON() {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'card-album.json';
+  a.download = 'coc-album.json';
   a.click();
   URL.revokeObjectURL(a.href);
-  showToast('JSON saved');
+  showToast('Album saved');
 }
 
 function importJSON(e) {
@@ -1147,6 +1181,7 @@ function importJSON(e) {
       mergeState(JSON.parse(ev.target.result));
       saveState();
       buildUI();
+      if (isMobile()) { buildMobileDots(); buildMobileView(); updateMobileNav(); }
       showToast('Album loaded');
     } catch { showToast('Error: invalid JSON file'); }
   };
@@ -1170,8 +1205,30 @@ function confirmClearAll() {
   showToast('All data cleared');
 }
 
+// ── EMPTY STATE CHECK ──────────────────────────────────────────────────────
+function openEmptyStatePrompt() {
+  document.getElementById('empty-state-overlay').classList.add('open');
+}
+function closeEmptyStatePrompt() {
+  document.getElementById('empty-state-overlay').classList.remove('open');
+}
+function isAlbumEmpty() {
+  return state.pages.every(p =>
+    p.cards.every(c => c.owned !== true && (!c.rarity || c.rarity < 1))
+  );
+}
+
 // ── INITIAL CONFIG ─────────────────────────────────────────────────────────
-function openInitialConfigConfirm() {
+function openInitialConfigConfirm(context) {
+  const title = document.getElementById('ic-title');
+  const msg   = document.getElementById('ic-message');
+  if (context === 'unconfigured-card') {
+    title.textContent = 'This card has no rarity set';
+    msg.innerHTML = `Cards without a star rating are skipped in the trade report and compare tool. Load the initial config to fill in set names, rarities, and rewards — your card status (Have/Missing) and copy counts are <strong>not affected</strong>.`;
+  } else {
+    title.textContent = 'Load initial config?';
+    msg.innerHTML = `This will refresh set names, card rarities, and rewards from the default configuration. Your card status (Have/Missing) and copy counts are <strong>not affected</strong>.`;
+  }
   document.getElementById('initial-config-overlay').classList.add('open');
 }
 function closeInitialConfigConfirm() {
@@ -1183,49 +1240,50 @@ async function confirmLoadInitialConfig() {
     const resp = await fetch('initial_config.json');
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const loaded = await resp.json();
-    state = initState();
-    mergeState(loaded);
+    mergeMetadataOnly(loaded);
     saveState();
     buildUI();
     if (isMobile()) { buildMobileDots(); buildMobileView(); updateMobileNav(); }
-    showToast('Initial config loaded');
+    showToast('Set names, rarities & rewards refreshed');
   } catch(e) {
-    showToast('Failed — use Import JSON with initial_config.json instead');
+    showToast('Failed — use Load Album with initial_config.json instead');
   }
 }
 
 // ── COMPARE & TRADE ────────────────────────────────────────────────────────
 //
-// Encoding: 9 bits per card × 135 cards = 1215 bits
-// Bit layout per card (MSB→LSB):
-//   [8]   owned    (1 = have, 0 = missing)
-//   [7]   golden   (1 = golden)
-//   [6-4] rarity   (0–5, 3 bits)
-//   [3-0] copies   (0–9 clamped, 4 bits)
+// Encoding v1: 1 version byte + 6 bits per card × 135 cards
+// Per-card bits (MSB→LSB):
+//   [5]   owned     (1 = have, 0 = missing)
+//   [4]   golden    (1 = golden)
+//   [3]   hasSpare  (1 = copies > 1 — exact count not encoded, only spare/no-spare)
+//   [2-0] rarity    (0–5, 3 bits)
 //
-// 1215 bits → 153 bytes (padded) → 306 hex chars
+// 6 bits × 135 = 810 bits → 102 bytes (padded) + 1 version byte = 103 bytes → 206 hex chars
 
-const BITS_PER_CARD = 9;
+const SHARE_VERSION = 1;
+const BITS_PER_CARD = 6;
 
 function encodeAlbum() {
   const allCards = [];
   state.pages.forEach(p => p.cards.forEach(c => allCards.push(c)));
 
-  const totalBits = allCards.length * BITS_PER_CARD; // 1215
-  const totalBytes = Math.ceil(totalBits / 8);       // 152
-  const buf = new Uint8Array(totalBytes);
+  const totalBits  = allCards.length * BITS_PER_CARD; // 810
+  const totalBytes = Math.ceil(totalBits / 8);         // 102
+  const buf = new Uint8Array(1 + totalBytes);          // +1 for version byte
+  buf[0] = SHARE_VERSION;
 
   allCards.forEach((c, i) => {
-    const owned   = c.owned === true ? 1 : 0;
-    const golden  = c.golden ? 1 : 0;
-    const rarity  = Math.min(7, Math.max(0, c.rarity || 0));
-    const copies  = Math.min(15, Math.max(0, c.copies || 0));
-    const bits    = (owned << 8) | (golden << 7) | (rarity << 4) | copies;
+    const owned    = c.owned === true ? 1 : 0;
+    const golden   = c.golden ? 1 : 0;
+    const hasSpare = (c.owned === true && c.copies > 1) ? 1 : 0;
+    const rarity   = Math.min(7, Math.max(0, c.rarity || 0));
+    const bits     = (owned << 5) | (golden << 4) | (hasSpare << 3) | rarity;
 
-    const bitPos  = i * BITS_PER_CARD;
+    const bitPos = i * BITS_PER_CARD;
     for (let b = 0; b < BITS_PER_CARD; b++) {
       const bit     = (bits >> (BITS_PER_CARD - 1 - b)) & 1;
-      const byteIdx = Math.floor((bitPos + b) / 8);
+      const byteIdx = 1 + Math.floor((bitPos + b) / 8); // +1 offset for version byte
       const bitIdx  = 7 - ((bitPos + b) % 8);
       buf[byteIdx] |= (bit << bitIdx);
     }
@@ -1235,8 +1293,14 @@ function encodeAlbum() {
 }
 
 function decodeAlbum(hex) {
-  if (!hex || hex.length < 2) throw new Error('Empty string');
-  const buf = new Uint8Array(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
+  if (!hex || hex.length < 4) throw new Error('String too short');
+  const bytes = hex.match(/.{1,2}/g).map(b => parseInt(b, 16));
+  const buf = new Uint8Array(bytes);
+
+  const version = buf[0];
+  if (version !== SHARE_VERSION) {
+    throw new Error(`Unsupported format (v${version}) — both sides need the same app version`);
+  }
 
   const cards = [];
   const count = 135;
@@ -1244,32 +1308,19 @@ function decodeAlbum(hex) {
     let bits = 0;
     const bitPos = i * BITS_PER_CARD;
     for (let b = 0; b < BITS_PER_CARD; b++) {
-      const byteIdx = Math.floor((bitPos + b) / 8);
+      const byteIdx = 1 + Math.floor((bitPos + b) / 8);
       const bitIdx  = 7 - ((bitPos + b) % 8);
       bits = (bits << 1) | ((buf[byteIdx] >> bitIdx) & 1);
     }
     cards.push({
-      num:    i + 1,
-      owned:  (bits >> 8) & 1,
-      golden: (bits >> 7) & 1,
-      rarity: (bits >> 4) & 0x7,
-      copies: bits & 0xF,
+      num:      i + 1,
+      owned:    (bits >> 5) & 1,
+      golden:   (bits >> 4) & 1,
+      hasSpare: (bits >> 3) & 1,
+      rarity:   bits & 0x7,
     });
   }
   return cards;
-}
-
-function openCompare() {
-  document.getElementById('compare-overlay').classList.add('open');
-  document.getElementById('my-share-string').value = encodeAlbum();
-  document.getElementById('their-share-string').value = '';
-  document.getElementById('compare-results').innerHTML = '';
-  document.getElementById('show-one-sided').onchange = renderCompareResults;
-  window._lastCompare = null;
-}
-
-function closeCompare() {
-  document.getElementById('compare-overlay').classList.remove('open');
 }
 
 function copyShareString() {
@@ -1303,7 +1354,7 @@ function runCompare() {
     const myOwned    = myCard.owned === true;
     const theyOwned  = tc.owned === 1;
     const mySpare    = myOwned  && myCard.copies > 1;
-    const theySpare  = theyOwned && tc.copies > 1;
+    const theySpare  = theyOwned && tc.hasSpare === 1;
     const myNeed     = !myOwned;
     const theyNeed   = !theyOwned;
     const myRarity   = myCard.rarity || 0;
@@ -1522,8 +1573,8 @@ function updateMobileNav() {
   document.getElementById('page-nav-name').textContent = page.name || `Page ${mobilePage + 1}`;
   const owned = page.cards.filter(c => c.owned === true).length;
   document.getElementById('page-nav-sub').textContent = `${owned} / ${CPP} · ${mobilePage + 1} of ${PAGES}`;
-  document.getElementById('page-prev').disabled = mobilePage === 0;
-  document.getElementById('page-next').disabled = mobilePage === PAGES - 1;
+  document.getElementById('page-prev').disabled = false;
+  document.getElementById('page-next').disabled = false;
   // Dots
   const dots = document.getElementById('page-dots');
   dots.querySelectorAll('.page-dot').forEach((dot, i) => {
@@ -1541,7 +1592,7 @@ function updateMobilePageProgress() {
 }
 
 function mobileNavPage(delta) {
-  mobilePage = Math.max(0, Math.min(PAGES - 1, mobilePage + delta));
+  mobilePage = (mobilePage + delta + PAGES) % PAGES;
   buildMobileView();
   updateMobileNav();
 }
@@ -1564,8 +1615,7 @@ function buildMobileDots() {
   document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
   document.addEventListener('touchend', e => {
     if (!isMobile()) return;
-    if (document.getElementById('export-panel').classList.contains('open')) return;
-    if (document.getElementById('compare-overlay').classList.contains('open')) return;
+    if (document.getElementById('trade-panel').classList.contains('open')) return;
     const dx = e.changedTouches[0].clientX - startX;
     if (Math.abs(dx) > 60) mobileNavPage(dx < 0 ? 1 : -1);
   }, { passive: true });
@@ -1583,16 +1633,18 @@ function esc(s) {
   return String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeExport(); closeCompare(); closeMobileMenu(); closeClearConfirm(); closeInitialConfigConfirm(); } });
-document.getElementById('export-panel').addEventListener('click', e => {
-  if (e.target === document.getElementById('export-panel')) closeExport();
-});
-document.getElementById('compare-overlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('compare-overlay')) closeCompare();
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeTradePanel(); closeMobileMenu(); closeClearConfirm(); closeInitialConfigConfirm(); closeEmptyStatePrompt(); } });
+document.getElementById('trade-panel').addEventListener('click', e => {
+  if (e.target === document.getElementById('trade-panel')) closeTradePanel();
 });
 
 loadState();
 buildUI();
+
+// First-visit check: if the album is completely empty, suggest loading initial config
+if (isAlbumEmpty()) {
+  openEmptyStatePrompt();
+}
 
 // Mobile init — runs after buildUI so state is ready
 if (isMobile()) {
