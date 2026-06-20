@@ -70,6 +70,11 @@ Generates a plain-text trade post you can paste straight into Discord:
 ★: 1, 3, 6, 7, 8, 10, 11, 14, 16, 19, 20, 21, 22, 23, 24
 ★★: 18, 25, 26, 34, 35, 42, 50, 52, 57, 58
 ★★★: 62, 69, 79, 87, 101, 103, 110, 118, 119
+
+Made with: https://ajgonbas.github.io/coc-card-trader/
+
+Skip the manual back-and-forth: paste my code below into the Compare Trade tab of the tool above, alongside your own, to check for matching trades automatically — same-rarity, same-type only.
+01a61a69869a69aa9a698698698aaa69a69a69aaa8a9a69a698aaaa3a618698aa8a38e9a698aa8aa8e3a69aaa8a38eb129a6...
 ```
 
 - **LF (Looking For)** lists every non-golden card currently set to `Missing`, grouped by rarity.
@@ -77,6 +82,8 @@ Generates a plain-text trade post you can paste straight into Discord:
 - **Golden FT** *(only shown when "Show Golden cards" is checked)* lists golden cards you have spares of — these can only be traded during special events.
 - **Golden LF** *(only shown when "Show Golden cards" is checked)* lists golden cards you're missing — same event-only restriction applies.
 - Sections with no data are omitted entirely, regardless of checkbox state.
+- A **"Made with"** credit line linking back to the live tool is always added at the end of the report.
+- Below that, your **share string** is included automatically along with a short explanation, so whoever you send the report to can immediately paste it into the Compare Trade tab and check for matches — no extra step of generating and copying it separately.
 
 Two checkboxes control the output:
 - **Show card names** — off by default. When off, only card numbers are shown (e.g. `42`); when on, the name is appended (e.g. `42 Cindermunk`).
@@ -86,7 +93,7 @@ At the bottom: **Copy to clipboard** copies the report as plain text, **Save as 
 
 #### Compare Trade tab
 
-Lets you find possible card swaps with another player without sharing your full album data.
+Lets you find possible card swaps with another player without sharing your full album data. A short on-screen blurb explains the same flow described below before you get started.
 
 **How it works:**
 

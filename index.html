@@ -292,6 +292,23 @@
   .report-section-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
   .report-line { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 2px; font-family: monospace; }
   .report-stars { color: var(--star-on); font-weight: 600; }
+  .report-footer-line {
+    font-size: 11px; color: var(--text3); margin-top: 10px;
+    padding-top: 10px; border-top: 1px solid var(--border);
+  }
+  .report-compare-block {
+    margin-top: 12px; padding: 10px 12px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .report-compare-intro {
+    font-size: 12px; color: var(--text2); line-height: 1.5; margin-bottom: 8px;
+  }
+  .report-compare-code {
+    font-family: monospace; font-size: 11px; color: var(--text);
+    word-break: break-all; background: var(--surface);
+    border: 1px solid var(--border2); border-radius: 4px; padding: 6px 8px;
+  }
   .export-footer {
     padding: 12px 16px; border-top: 1px solid var(--border);
     display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
@@ -339,6 +356,11 @@
   .confirm-btns   { display: flex; gap: 8px; justify-content: flex-end; }
   /* ── COMPARE (inside trade panel) ── */
   .compare-body { display: flex; flex-direction: column; gap: 14px; }
+  .compare-intro {
+    font-size: 13px; color: var(--text2); line-height: 1.5;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 10px 12px;
+  }
 
   .share-row { display: flex; flex-direction: column; gap: 6px; }
   .share-row label { font-size: 12px; font-weight: 600; color: var(--text2); }
@@ -633,6 +655,10 @@
     <!-- COMPARE TAB -->
     <div id="trade-tab-compare" class="export-body" style="display:none;">
       <div class="compare-body" style="padding:0; overflow:visible; flex:none;">
+        <p class="compare-intro">
+          Skip the manual back-and-forth: generate your share code below, swap it with another player, and this tool checks for matching trades automatically — same-rarity, same-type only.
+        </p>
+        <hr class="compare-divider">
         <div class="share-row">
           <label>YOUR SHARE STRING</label>
           <div class="share-string-box">
@@ -1122,6 +1148,11 @@ function renderReport() {
     s.lines.forEach(line => { html += `<div class="report-line">${esc(line)}</div>`; });
     html += `</div>`;
   });
+  html += `<div class="report-footer-line">Made with: https://ajgonbas.github.io/coc-card-trader/</div>`;
+  html += `<div class="report-compare-block">
+    <p class="report-compare-intro">Skip the manual back-and-forth: paste my code below into the Compare Trade tab of the tool above, alongside your own, to check for matching trades automatically — same-rarity, same-type only.</p>
+    <div class="report-compare-code">${esc(encodeAlbum())}</div>
+  </div>`;
   body.innerHTML = html;
 }
 
@@ -1134,6 +1165,10 @@ function buildTextReport() {
     lines.push(...s.lines);
     lines.push('');
   });
+  lines.push('Made with: https://ajgonbas.github.io/coc-card-trader/');
+  lines.push('');
+  lines.push('Skip the manual back-and-forth: paste my code below into the Compare Trade tab of the tool above, alongside your own, to check for matching trades automatically — same-rarity, same-type only.');
+  lines.push(encodeAlbum());
   return lines.join('\n').trim();
 }
 
